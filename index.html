@@ -9,6 +9,11 @@
    
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+    <!-- PDF + Charts + Canvas Capture -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -108,7 +113,7 @@
     </aside>
 
     <main class="flex-1 p-6 md:p-12 overflow-y-auto">
-        <!-- DASHBOARD TAB (unchanged) -->
+        <!-- DASHBOARD TAB -->
         <div id="tab-dashboard" class="tab-content active">
             <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
                 <div>
@@ -124,7 +129,7 @@
                 </div>
             </header>
 
-            <!-- STATS (unchanged) -->
+            <!-- STATS -->
             <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <div class="glass-card p-6 rounded-3xl card-hover">
                     <p class="text-gray-400 text-sm mb-2 uppercase tracking-tighter">Site Trainers</p>
@@ -149,7 +154,7 @@
                 </div>
             </section>
 
-            <!-- HOMEPAGE EDITOR (unchanged) -->
+            <!-- HOMEPAGE EDITOR -->
             <section class="mb-12">
                 <h2 class="font-heading text-3xl font-bold mb-8">Homepage <span class="text-primary">Content</span></h2>
                 <div class="glass-card p-8 rounded-3xl mb-10 card-hover">
@@ -168,8 +173,11 @@
                                 <input id="hero-button" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none">
                             </div>
                             <div>
-                                <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Background Image URL</label>
-                                <input id="hero-image" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none">
+                                <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Background Image</label>
+                                <input type="file" id="hero-image-upload" accept="image/*" class="hidden">
+                                <button onclick="document.getElementById('hero-image-upload').click()" class="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-2xl text-sm">SELECT IMAGE FILE</button>
+                                <button onclick="uploadHeroImage()" class="mt-3 w-full bg-primary text-black font-bold py-3 rounded-2xl text-sm">UPLOAD TO CLOUDINARY</button>
+                                <input id="hero-image-url" type="hidden">
                             </div>
                         </div>
                         <div>
@@ -186,29 +194,38 @@
                         <span class="text-xs text-gray-400">3 cards — title, description & image</span>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- CARD 1 -->
                         <div class="glass-card p-6 rounded-2xl card-hover">
                             <div class="uppercase text-[10px] font-bold tracking-widest text-primary mb-4">CARD 01</div>
                             <input id="service1-title" type="text" class="w-full bg-transparent border-b border-white/30 pb-3 text-lg font-semibold outline-none mb-4">
                             <textarea id="service1-desc" rows="5" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl p-4 text-sm outline-none mb-4 resize-y"></textarea>
-                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Image URL</label>
-                            <input id="service1-image" type="text" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 text-xs outline-none">
-                            <button onclick="updateService(1)" class="mt-6 w-full bg-primary/10 hover:bg-primary/20 text-primary font-bold py-3 rounded-2xl text-xs tracking-widest">UPDATE CARD 1</button>
+                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Service Image</label>
+                            <input type="file" id="service1-image-upload" accept="image/*" class="hidden">
+                            <button onclick="document.getElementById('service1-image-upload').click()" class="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-2xl text-sm">SELECT IMAGE</button>
+                            <button onclick="uploadServiceImage(1)" class="mt-3 w-full bg-primary text-black font-bold py-3 rounded-2xl text-sm">UPLOAD TO CLOUDINARY</button>
+                            <input id="service1-image-url" type="hidden">
                         </div>
+                        <!-- CARD 2 -->
                         <div class="glass-card p-6 rounded-2xl card-hover">
                             <div class="uppercase text-[10px] font-bold tracking-widest text-primary mb-4">CARD 02</div>
                             <input id="service2-title" type="text" class="w-full bg-transparent border-b border-white/30 pb-3 text-lg font-semibold outline-none mb-4">
                             <textarea id="service2-desc" rows="5" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl p-4 text-sm outline-none mb-4 resize-y"></textarea>
-                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Image URL</label>
-                            <input id="service2-image" type="text" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 text-xs outline-none">
-                            <button onclick="updateService(2)" class="mt-6 w-full bg-primary/10 hover:bg-primary/20 text-primary font-bold py-3 rounded-2xl text-xs tracking-widest">UPDATE CARD 2</button>
+                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Service Image</label>
+                            <input type="file" id="service2-image-upload" accept="image/*" class="hidden">
+                            <button onclick="document.getElementById('service2-image-upload').click()" class="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-2xl text-sm">SELECT IMAGE</button>
+                            <button onclick="uploadServiceImage(2)" class="mt-3 w-full bg-primary text-black font-bold py-3 rounded-2xl text-sm">UPLOAD TO CLOUDINARY</button>
+                            <input id="service2-image-url" type="hidden">
                         </div>
+                        <!-- CARD 3 -->
                         <div class="glass-card p-6 rounded-2xl card-hover">
                             <div class="uppercase text-[10px] font-bold tracking-widest text-primary mb-4">CARD 03</div>
                             <input id="service3-title" type="text" class="w-full bg-transparent border-b border-white/30 pb-3 text-lg font-semibold outline-none mb-4">
                             <textarea id="service3-desc" rows="5" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl p-4 text-sm outline-none mb-4 resize-y"></textarea>
-                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Image URL</label>
-                            <input id="service3-image" type="text" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 text-xs outline-none">
-                            <button onclick="updateService(3)" class="mt-6 w-full bg-primary/10 hover:bg-primary/20 text-primary font-bold py-3 rounded-2xl text-xs tracking-widest">UPDATE CARD 3</button>
+                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Service Image</label>
+                            <input type="file" id="service3-image-upload" accept="image/*" class="hidden">
+                            <button onclick="document.getElementById('service3-image-upload').click()" class="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-2xl text-sm">SELECT IMAGE</button>
+                            <button onclick="uploadServiceImage(3)" class="mt-3 w-full bg-primary text-black font-bold py-3 rounded-2xl text-sm">UPLOAD TO CLOUDINARY</button>
+                            <input id="service3-image-url" type="hidden">
                         </div>
                     </div>
                 </div>
@@ -220,8 +237,8 @@
             <div class="flex justify-between items-center mb-6">
                 <h1 class="font-heading text-4xl font-bold">Members <span class="text-primary">Management</span></h1>
                 <div class="flex gap-3">
-                    <button onclick="exportMembersCSV()" class="bg-primary/10 hover:bg-primary/20 text-primary px-6 py-3 rounded-2xl text-sm font-bold tracking-widest flex items-center gap-2">
-                        EXPORT MEMBERS CSV
+                    <button onclick="exportMembersPDF()" class="bg-primary/10 hover:bg-primary/20 text-primary px-6 py-3 rounded-2xl text-sm font-bold tracking-widest flex items-center gap-2">
+                        EXPORT PDF REPORT
                     </button>
                     <button onclick="refreshMembers()" class="bg-primary/10 hover:bg-primary/20 text-primary px-6 py-3 rounded-2xl text-sm font-bold tracking-widest flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.058 11H1M12 3v2m0 16v2m9-9H15m-6 0H3" /></svg>
@@ -238,7 +255,7 @@
                 </div>
             </div>
 
-            <!-- PENDING APPLICATIONS (unchanged) -->
+            <!-- PENDING APPLICATIONS -->
             <div class="mb-12">
                 <h3 class="font-heading text-2xl mb-4 flex items-center gap-3">
                     <span class="text-orange-400">●</span> Pending Applications
@@ -328,13 +345,12 @@
         </div>
     </main>
 
-    <!-- EDIT MEMBER MODAL (unchanged) -->
+    <!-- EDIT MEMBER MODAL -->
     <div id="edit-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-2xl mx-4 rounded-3xl p-8 max-h-[90vh] overflow-y-auto">
             <h3 class="font-heading text-2xl mb-6">Edit Member</h3>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Left column -->
                 <div class="space-y-6">
                     <div>
                         <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Profile Photo</label>
@@ -367,7 +383,6 @@
                     </div>
                 </div>
 
-                <!-- Right column -->
                 <div>
                     <div class="mb-6">
                         <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Notes (admin only)</label>
@@ -387,7 +402,7 @@
         </div>
     </div>
 
-    <!-- APPROVAL CONFIRMATION MODAL (unchanged) -->
+    <!-- APPROVAL CONFIRMATION MODAL -->
     <div id="approve-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
             <div class="flex justify-between items-center mb-6">
@@ -426,7 +441,7 @@
         </div>
     </div>
 
-    <!-- RECORD PAYMENT MODAL (unchanged) -->
+    <!-- RECORD PAYMENT MODAL -->
     <div id="payment-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
             <div class="flex justify-between items-center mb-6">
@@ -460,7 +475,7 @@
         </div>
     </div>
 
-    <!-- PAYMENT CONFIRMATION MODAL (unchanged) -->
+    <!-- PAYMENT CONFIRMATION MODAL -->
     <div id="payment-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
             <div class="text-green-400 text-6xl mb-4">✓</div>
@@ -470,7 +485,7 @@
         </div>
     </div>
 
-    <!-- SUCCESS MODAL (new - for all successful actions) -->
+    <!-- SUCCESS MODAL -->
     <div id="success-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
             <div class="text-green-400 text-6xl mb-4">✓</div>
@@ -479,6 +494,9 @@
             <button onclick="closeSuccessModal()" class="w-full bg-primary text-black font-bold py-4 rounded-2xl">CLOSE</button>
         </div>
     </div>
+
+    <!-- TEMP PDF CONTENT -->
+    <div id="pdf-temp" class="hidden"></div>
 
     <script>
         // CONFIG
@@ -492,7 +510,6 @@
             appId: "1:708458917827:web:375de278577df0adcf9776"
         };
 
-        // CLOUDINARY CONFIG - REPLACE WITH YOUR OWN
         const CLOUD_NAME = "YOUR_CLOUDINARY_CLOUD_NAME";
         const UPLOAD_PRESET = "YOUR_UNSIGNED_UPLOAD_PRESET";
 
@@ -513,7 +530,7 @@
             if (activeBtn) activeBtn.classList.add('active');
         }
 
-        // STATS (unchanged)
+        // STATS
         function syncStats() {
             db.ref('stats').on('value', (snapshot) => {
                 const data = snapshot.val() || {};
@@ -529,14 +546,14 @@
                 .catch(err => console.error(err));
         }
 
-        // HOMEPAGE (unchanged)
+        // HOMEPAGE
         function syncHomepage() {
             db.ref('homepage/hero').on('value', (snapshot) => {
                 const data = snapshot.val() || {};
                 document.getElementById('hero-heading').value = data.heading || "";
                 document.getElementById('hero-subtext').value = data.subtext || "";
                 document.getElementById('hero-button').value = data.buttonText || "";
-                document.getElementById('hero-image').value = data.imageUrl || "";
+                document.getElementById('hero-image-url').value = data.imageUrl || "";
             });
             db.ref('homepage/services').on('value', (snapshot) => {
                 const data = snapshot.val() || {};
@@ -544,7 +561,7 @@
                     const card = data[i] || {};
                     document.getElementById(`service${i}-title`).value = card.title || "";
                     document.getElementById(`service${i}-desc`).value = card.description || "";
-                    document.getElementById(`service${i}-image`).value = card.imageUrl || "";
+                    document.getElementById(`service${i}-image-url`).value = card.imageUrl || "";
                 }
             });
         }
@@ -552,19 +569,19 @@
             const heading = document.getElementById('hero-heading').value.trim();
             const subtext = document.getElementById('hero-subtext').value.trim();
             const buttonText = document.getElementById('hero-button').value.trim();
-            const imageUrl = document.getElementById('hero-image').value.trim();
+            const imageUrl = document.getElementById('hero-image-url').value.trim();
             db.ref('homepage/hero').update({ heading, subtext, buttonText, imageUrl })
-                .then(() => alert('Hero section updated successfully!'));
+                .then(() => showSuccess("Hero Saved", "Changes applied successfully!"));
         }
         function updateService(n) {
             const title = document.getElementById(`service${n}-title`).value.trim();
             const description = document.getElementById(`service${n}-desc`).value.trim();
-            const imageUrl = document.getElementById(`service${n}-image`).value.trim();
+            const imageUrl = document.getElementById(`service${n}-image-url`).value.trim();
             db.ref(`homepage/services/${n}`).update({ title, description, imageUrl })
-                .then(() => alert(`Service Card ${n} updated successfully!`));
+                .then(() => showSuccess(`Card ${n} Saved`, "Service card updated!"));
         }
 
-        // CLOUDINARY UPLOAD
+        // CLOUDINARY UPLOAD (used by ALL images)
         async function uploadImage(file) {
             if (!CLOUD_NAME || CLOUD_NAME === "YOUR_CLOUDINARY_CLOUD_NAME") {
                 alert("Please set your Cloudinary CLOUD_NAME and UPLOAD_PRESET in the code!");
@@ -582,18 +599,37 @@
                 return data.secure_url;
             } catch (err) {
                 console.error(err);
-                alert("Upload failed");
+                alert("Cloudinary upload failed");
                 return null;
             }
         }
 
-        // PLAN DURATION HELPER
+        // HOMEPAGE IMAGE UPLOADS
+        async function uploadHeroImage() {
+            const file = document.getElementById('hero-image-upload').files[0];
+            if (!file) return alert("Please select an image first");
+            const url = await uploadImage(file);
+            if (url) {
+                document.getElementById('hero-image-url').value = url;
+                showSuccess("Hero Image Uploaded", "URL saved to database on SAVE");
+            }
+        }
+        async function uploadServiceImage(n) {
+            const file = document.getElementById(`service${n}-image-upload`).files[0];
+            if (!file) return alert("Please select an image first");
+            const url = await uploadImage(file);
+            if (url) {
+                document.getElementById(`service${n}-image-url`).value = url;
+                showSuccess(`Card ${n} Image Uploaded`, "URL saved to database on SAVE");
+            }
+        }
+
+        // PLAN DURATION
         function getPlanDuration(plan) {
             if (!plan) return 30;
             const p = plan.toLowerCase();
             if (p.includes('annual') || p.includes('year')) return 365;
             if (p.includes('quarter')) return 90;
-            if (p.includes('month')) return 30;
             return 30;
         }
 
@@ -651,12 +687,8 @@
             db.ref('counter/membershipNext').transaction((current) => {
                 return (current || 1000) + 1;
             }, (error, committed, snapshot) => {
-                if (error) {
-                    console.error(error);
-                    callback(null);
-                } else {
-                    callback(snapshot.val());
-                }
+                if (error) callback(null);
+                else callback(snapshot.val());
             });
         }
 
@@ -665,7 +697,7 @@
             db.ref(`membershipRequests/${requestKey}`).once('value', (snap) => {
                 const req = snap.val();
                 getNextMembershipId((id) => {
-                    if (!id) return alert("Failed to generate membership ID");
+                    if (!id) return alert("Failed to generate ID");
                     pendingApproveId = id;
                     document.getElementById('confirm-name').textContent = req.name || "";
                     document.getElementById('confirm-plan').textContent = req.plan || "";
@@ -686,9 +718,8 @@
 
         function copyMembershipId() {
             const id = document.getElementById('confirm-membership-id').textContent;
-            navigator.clipboard.writeText(id).then(() => {
-                alert('Membership ID copied to clipboard!');
-            });
+            navigator.clipboard.writeText(id);
+            alert('Membership ID copied!');
         }
 
         function confirmApproval() {
@@ -728,16 +759,14 @@
         }
 
         function deleteRequest(id) {
-            if (confirm('Delete this application permanently?')) {
-                db.ref(`membershipRequests/${id}`).remove();
-            }
+            if (confirm('Delete this application permanently?')) db.ref(`membershipRequests/${id}`).remove();
         }
 
         function deleteApprovedMember(key) {
-            if (confirm('Permanently delete this approved member and all their data? This action cannot be undone.')) {
+            if (confirm('Permanently delete this member?')) {
                 db.ref(`members/${key}`).remove().then(() => {
-                    showSuccess("Member Deleted", "The approved member has been permanently removed from the system.");
-                }).catch(err => console.error(err));
+                    showSuccess("Member Deleted", "All data removed permanently.");
+                });
             }
         }
 
@@ -782,11 +811,10 @@
             Object.keys(window.allMembers || {}).forEach(key => {
                 const m = window.allMembers[key];
                 const matchesSearch = !searchTerm || 
-                    (m.name || '').toLowerCase().includes(searchTerm) ||
-                    (m.memberNumber || '').includes(searchTerm) ||
-                    (m.email || '').toLowerCase().includes(searchTerm) ||
-                    (m.phone || '').includes(searchTerm);
-                
+                    m.name?.toLowerCase().includes(searchTerm) ||
+                    m.memberNumber?.includes(searchTerm) ||
+                    m.email?.toLowerCase().includes(searchTerm) ||
+                    m.phone?.includes(searchTerm);
                 let matchesStatus = true;
                 if (statusFilter !== 'all') {
                     const daysLeft = m.expiryDate ? Math.ceil((m.expiryDate - Date.now()) / 86400000) : -999;
@@ -810,27 +838,16 @@
                 document.getElementById('modal-photo-url').value = m.profileImage || "";
                 document.getElementById('modal-preview').src = m.profileImage || "https://via.placeholder.com/80";
                 document.getElementById('modal-notes').value = m.notes || "";
-                
-                // Render activity log
                 const logDiv = document.getElementById('modal-activity-log');
                 logDiv.innerHTML = "";
                 if (m.activityLog && m.activityLog.length) {
                     m.activityLog.slice().reverse().forEach(log => {
                         const date = new Date(log.timestamp).toLocaleString();
-                        logDiv.innerHTML += `
-                            <div class="timeline-item text-xs">
-                                <div class="flex justify-between text-gray-400">
-                                    <span>${log.action}</span>
-                                    <span>${date}</span>
-                                </div>
-                                <div class="text-gray-500">${log.details || ''}</div>
-                            </div>
-                        `;
+                        logDiv.innerHTML += `<div class="timeline-item text-xs"><div class="flex justify-between text-gray-400"><span>${log.action}</span><span>${date}</span></div><div class="text-gray-500">${log.details || ''}</div></div>`;
                     });
                 } else {
                     logDiv.innerHTML = `<p class="text-gray-500 text-xs">No activity yet.</p>`;
                 }
-                
                 document.getElementById('edit-modal').classList.remove('hidden');
                 document.getElementById('edit-modal').classList.add('flex');
             });
@@ -857,19 +874,12 @@
                 profileImage: document.getElementById('modal-photo-url').value || "https://via.placeholder.com/150",
                 notes: document.getElementById('modal-notes').value.trim()
             };
-            
-            // Add to activity log
             let log = currentData.activityLog || [];
-            log.push({
-                action: "Profile Updated",
-                timestamp: Date.now(),
-                details: "Admin edited member details"
-            });
+            log.push({action: "Profile Updated", timestamp: Date.now(), details: "Admin edited member details"});
             updates.activityLog = log;
-
             db.ref(`members/${currentEditingKey}`).update(updates)
                 .then(() => {
-                    showSuccess("Member Updated", "Changes saved successfully!");
+                    showSuccess("Member Updated", "All changes saved!");
                     closeModal();
                 });
         }
@@ -884,7 +894,6 @@
             alert("Data refreshed");
         }
 
-        // CHECK-IN
         function logCheckIn() {
             const id = document.getElementById('checkin-member-id').value.trim();
             if (!id) return alert("Enter Membership ID");
@@ -899,13 +908,12 @@
                     visits: [...(m.visits || []), now]
                 };
                 db.ref(`members/${memberKey}`).update(updates).then(() => {
-                    showSuccess("Check-in Logged", `Successfully recorded visit for #${id}`);
+                    showSuccess("Check-in Logged", `Visit recorded for #${id}`);
                     document.getElementById('checkin-member-id').value = "";
                 });
             });
         }
 
-        // PAYMENTS
         function listenToPayments() {
             db.ref('members').on('value', (snapshot) => {
                 window.allMembers = snapshot.val() || {};
@@ -954,61 +962,30 @@
             const amount = parseFloat(document.getElementById('payment-amount').value);
             const date = document.getElementById('payment-date').value;
             const note = document.getElementById('payment-note').value.trim();
-
-            if (!memberId || !amount || !date) {
-                alert("Membership ID, amount and date are required");
-                return;
-            }
-
+            if (!memberId || !amount || !date) return alert("Membership ID, amount and date required");
             db.ref('members').orderByChild('memberNumber').equalTo(memberId).once('value', (snap) => {
-                if (!snap.exists()) {
-                    alert("No member found with this Membership ID");
-                    return;
-                }
+                if (!snap.exists()) return alert("Member not found");
                 const memberKey = Object.keys(snap.val())[0];
                 const member = snap.val()[memberKey];
-
-                const newPayment = {
-                    date: date,
-                    amount: amount,
-                    note: note || "Manual payment",
-                    timestamp: Date.now()
-                };
-
+                const newPayment = {date, amount, note: note || "Manual", timestamp: Date.now()};
                 const durationDays = getPlanDuration(member.plan);
-                const newExpiry = Math.max(member.expiryDate || Date.now(), Date.now() + (durationDays * 86400000));
-
+                const newExpiry = Math.max(member.expiryDate || Date.now(), Date.now() + durationDays * 86400000);
                 const updates = {};
                 updates[`members/${memberKey}/payments`] = [...(member.payments || []), newPayment];
                 updates[`members/${memberKey}/totalPaid`] = (member.totalPaid || 0) + amount;
                 updates[`members/${memberKey}/lastPayment`] = Date.now();
                 updates[`members/${memberKey}/expiryDate`] = newExpiry;
-
-                // Log activity
                 let log = member.activityLog || [];
-                log.push({
-                    action: "Payment Recorded",
-                    timestamp: Date.now(),
-                    details: `R${amount} - ${note || 'Manual'}`
-                });
+                log.push({action: "Payment Recorded", timestamp: Date.now(), details: `R${amount}`});
                 updates[`members/${memberKey}/activityLog`] = log;
-
                 db.ref().update(updates).then(() => {
                     closePaymentModal();
-                    showPaymentConfirm(member.name, amount, newExpiry);
+                    const expiryDate = new Date(newExpiry).toLocaleDateString();
+                    document.getElementById('payment-confirm-text').innerHTML = `<strong>${member.name}</strong><br>Amount: <span class="text-green-400">R${amount}</span><br>New Expiry: ${expiryDate}`;
+                    document.getElementById('payment-confirm-modal').classList.remove('hidden');
+                    document.getElementById('payment-confirm-modal').classList.add('flex');
                 });
             });
-        }
-
-        function showPaymentConfirm(name, amount, newExpiry) {
-            const expiryDate = new Date(newExpiry).toLocaleDateString();
-            document.getElementById('payment-confirm-text').innerHTML = `
-                <strong>${name}</strong><br>
-                Amount: <span class="text-green-400">R${amount}</span><br>
-                New Expiry: ${expiryDate}
-            `;
-            document.getElementById('payment-confirm-modal').classList.remove('hidden');
-            document.getElementById('payment-confirm-modal').classList.add('flex');
         }
 
         function closePaymentConfirmModal() {
@@ -1017,26 +994,137 @@
             modal.classList.remove('flex');
         }
 
-        // CSV EXPORT
-        function exportMembersCSV() {
+        // BEAUTIFUL PDF REPORT WITH GRAPHS + TABLE
+        async function exportMembersPDF() {
             const members = Object.values(window.allMembers || {});
-            let csv = "Member#,Name,Plan,Expiry,Status,Total Paid,Visits,Joined\n";
-            members.forEach(m => {
-                const expiry = m.expiryDate ? new Date(m.expiryDate).toLocaleDateString() : '';
-                const status = m.expiryDate ? (Date.now() > m.expiryDate ? 'Expired' : (m.expiryDate - Date.now()) / 86400000 <= 14 ? 'Expiring Soon' : 'Active') : 'No Expiry';
-                csv += `"#${m.memberNumber}","${m.name}","${m.plan}","${expiry}","${status}",${m.totalPaid || 0},${m.visitCount || 0},${new Date(m.joined).toLocaleDateString()}\n`;
-            });
-            downloadCSV(csv, "fitcore_members.csv");
-        }
+            if (members.length === 0) return alert("No members to export");
 
-        function downloadCSV(csv, filename) {
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(url);
+            const temp = document.getElementById('pdf-temp');
+            temp.innerHTML = `
+                <div class="bg-[#0A0A0A] text-white p-12 max-w-5xl mx-auto font-sans" style="width: 210mm; min-height: 297mm;">
+                    <div class="text-center mb-12">
+                        <div class="font-heading text-7xl text-primary tracking-widest">FITCORE</div>
+                        <div class="text-4xl font-bold mt-2">MEMBER REPORT</div>
+                        <div class="text-gray-400 mt-1">${new Date().toLocaleDateString('en-GB', {weekday:'long', year:'numeric', month:'long', day:'numeric'})}</div>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-6 mb-12">
+                        <div class="glass-card p-6 rounded-3xl text-center">
+                            <div class="text-xs text-gray-400">TOTAL MEMBERS</div>
+                            <div class="text-5xl font-bold text-primary mt-2">${members.length}</div>
+                        </div>
+                        <div class="glass-card p-6 rounded-3xl text-center">
+                            <div class="text-xs text-gray-400">ACTIVE</div>
+                            <div class="text-5xl font-bold text-green-400 mt-2">${members.filter(m => m.expiryDate && m.expiryDate > Date.now() + 14*86400000).length}</div>
+                        </div>
+                        <div class="glass-card p-6 rounded-3xl text-center">
+                            <div class="text-xs text-gray-400">EXPIRING SOON</div>
+                            <div class="text-5xl font-bold text-yellow-400 mt-2">${members.filter(m => m.expiryDate && m.expiryDate > Date.now() && m.expiryDate < Date.now() + 14*86400000).length}</div>
+                        </div>
+                        <div class="glass-card p-6 rounded-3xl text-center">
+                            <div class="text-xs text-gray-400">EXPIRED</div>
+                            <div class="text-5xl font-bold text-red-400 mt-2">${members.filter(m => m.expiryDate && m.expiryDate < Date.now()).length}</div>
+                        </div>
+                    </div>
+
+                    <h2 class="font-heading text-3xl mb-6 border-b border-white/10 pb-4">All Members</h2>
+                    <table class="w-full border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-white/20 text-left text-gray-400">
+                                <th class="py-4 pr-6">MEMBER #</th>
+                                <th class="py-4 pr-6">NAME</th>
+                                <th class="py-4 pr-6">PLAN</th>
+                                <th class="py-4 pr-6">EXPIRY</th>
+                                <th class="py-4">TOTAL PAID</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pdf-table-body" class="text-gray-300"></tbody>
+                    </table>
+
+                    <div class="mt-16 grid grid-cols-2 gap-12">
+                        <div>
+                            <h3 class="font-heading text-2xl mb-6">Plan Distribution</h3>
+                            <canvas id="plan-chart" width="500" height="500"></canvas>
+                        </div>
+                        <div>
+                            <h3 class="font-heading text-2xl mb-6">Membership Status</h3>
+                            <canvas id="status-chart" width="500" height="500"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="text-center text-gray-500 text-xs mt-20">CONFIDENTIAL • FITCORE GYM MANAGEMENT SYSTEM</div>
+                </div>
+            `;
+
+            // Populate table
+            const tbody = document.getElementById('pdf-table-body');
+            members.forEach(m => {
+                const expiry = m.expiryDate ? new Date(m.expiryDate).toLocaleDateString() : '—';
+                tbody.innerHTML += `
+                    <tr class="border-b border-white/10">
+                        <td class="py-4 pr-6 font-mono">#${m.memberNumber}</td>
+                        <td class="py-4 pr-6">${m.name}</td>
+                        <td class="py-4 pr-6">${m.plan}</td>
+                        <td class="py-4 pr-6">${expiry}</td>
+                        <td class="py-4 text-green-400">R${(m.totalPaid || 0).toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+
+            // Plan Pie Chart
+            const planCounts = {};
+            members.forEach(m => {
+                const p = m.plan || "Other";
+                planCounts[p] = (planCounts[p] || 0) + 1;
+            });
+            const planCtx = document.getElementById('plan-chart').getContext('2d');
+            new Chart(planCtx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(planCounts),
+                    datasets: [{ data: Object.values(planCounts), backgroundColor: ['#D6FF00','#00FFAA','#FF00CC','#00CCFF'] }]
+                },
+                options: { plugins: { legend: { position: 'bottom', labels: { color: '#fff', font: { size: 14 } } } } }
+            });
+
+            // Status Bar Chart
+            const active = members.filter(m => m.expiryDate && m.expiryDate > Date.now() + 14*86400000).length;
+            const expiring = members.filter(m => m.expiryDate && m.expiryDate > Date.now() && m.expiryDate <= Date.now() + 14*86400000).length;
+            const expired = members.filter(m => m.expiryDate && m.expiryDate < Date.now()).length;
+            const statusCtx = document.getElementById('status-chart').getContext('2d');
+            new Chart(statusCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Active', 'Expiring Soon', 'Expired'],
+                    datasets: [{ label: 'Members', data: [active, expiring, expired], backgroundColor: ['#22c55e', '#eab308', '#ef4444'] }]
+                },
+                options: { plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#fff' } } } }
+            });
+
+            // Wait for charts to render
+            setTimeout(async () => {
+                const canvas = await html2canvas(temp.firstElementChild, { scale: 2, useCORS: true });
+                const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const imgWidth = pageWidth;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pdf.internal.pageSize.getHeight();
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pdf.internal.pageSize.getHeight();
+                }
+
+                pdf.save('fitcore_member_report.pdf');
+                temp.innerHTML = '';
+                showSuccess("PDF Report Generated", "Beautiful tables + graphs saved to your device");
+            }, 1200);
         }
 
         // START
