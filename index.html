@@ -60,7 +60,6 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col md:flex-row overflow-hidden">
-
 <!-- SIDEBAR -->
 <aside class="w-full md:w-64 bg-card border-r border-white/5 p-6 flex flex-col md:sticky md:top-0 md:h-screen overflow-y-auto flex-shrink-0">
     <div class="font-heading text-2xl font-bold tracking-wider text-white mb-10">
@@ -85,10 +84,8 @@
         <p class="text-[10px] text-primary truncate">pinotp-d7ef5.firebaseapp.com</p>
     </div>
 </aside>
-
 <!-- MAIN -->
 <main class="flex-1 p-6 md:p-12 overflow-y-auto h-screen">
-
     <!-- DASHBOARD TAB -->
     <div id="tab-dashboard" class="tab-content active">
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
@@ -220,7 +217,6 @@
             </div>
         </section>
     </div>
-
     <!-- MEMBERS TAB -->
     <div id="tab-members" class="tab-content">
         <div class="flex justify-between items-center mb-6">
@@ -283,7 +279,6 @@
             </div>
         </div>
     </div>
-
     <!-- PAYMENTS TAB -->
     <div id="tab-payments" class="tab-content">
         <div class="flex justify-between items-center mb-8">
@@ -307,7 +302,6 @@
         </div>
     </div>
 </main>
-
 <!-- EDIT MEMBER MODAL -->
 <div id="edit-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-2xl mx-4 rounded-3xl p-8 max-h-[90vh] overflow-y-auto">
@@ -327,7 +321,16 @@
                     <input id="modal-photo-url" type="text" class="hidden">
                 </div>
                 <div><label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Name</label><input id="modal-name" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none"></div>
-                <div><label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Plan</label><input id="modal-plan" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none"></div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Plan</label>
+                    <select id="modal-plan" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
+                        <option value="Monthly Membership">Monthly Membership</option>
+                        <option value="Quarterly Membership">Quarterly Membership</option>
+                        <option value="6 Months Membership">6 Months Membership</option>
+                        <option value="Annual Membership">Annual Membership</option>
+                        <option value="Premium Unlimited">Premium Unlimited</option>
+                    </select>
+                </div>
                 <div><label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Email</label><input id="modal-email" type="email" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none"></div>
                 <div><label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Phone</label><input id="modal-phone" type="tel" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none"></div>
             </div>
@@ -342,7 +345,6 @@
         </div>
     </div>
 </div>
-
 <!-- APPROVAL CONFIRMATION MODAL -->
 <div id="approve-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
@@ -369,7 +371,25 @@
         </div>
     </div>
 </div>
-
+<!-- DELETE CONFIRMATION MODAL -->
+<div id="delete-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
+    <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="font-heading text-2xl text-red-400">Confirm Permanent Deletion</h3>
+            <button onclick="closeDeleteModal()" class="text-gray-400 hover:text-white text-3xl leading-none">×</button>
+        </div>
+        <div class="text-center mb-8">
+            <div class="text-red-400 text-6xl mb-4">⚠️</div>
+            <p class="text-lg font-medium mb-2">Delete Member?</p>
+            <p id="delete-member-name" class="text-gray-400"></p>
+            <p class="text-xs text-red-400/70 mt-4">This action cannot be undone.<br>All data, history and payments will be lost.</p>
+        </div>
+        <div class="flex gap-3">
+            <button onclick="closeDeleteModal()" class="flex-1 py-4 rounded-2xl border border-white/10 hover:bg-white/5 text-sm font-bold">CANCEL</button>
+            <button onclick="confirmDeleteMember()" class="flex-1 py-4 bg-red-500 hover:bg-red-600 text-white rounded-2xl text-sm font-bold">DELETE MEMBER</button>
+        </div>
+    </div>
+</div>
 <!-- RECORD PAYMENT MODAL -->
 <div id="payment-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
@@ -389,7 +409,6 @@
         </div>
     </div>
 </div>
-
 <!-- PAYMENT CONFIRMATION MODAL -->
 <div id="payment-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
@@ -399,7 +418,6 @@
         <button onclick="closePaymentConfirmModal()" class="w-full bg-primary text-black font-bold py-4 rounded-2xl">CLOSE</button>
     </div>
 </div>
-
 <!-- SUCCESS MODAL -->
 <div id="success-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
@@ -409,7 +427,6 @@
         <button onclick="closeSuccessModal()" class="w-full bg-primary text-black font-bold py-4 rounded-2xl">CLOSE</button>
     </div>
 </div>
-
 <!-- ===== NEW: REFRESH MODAL ===== -->
 <div id="refresh-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
@@ -425,7 +442,6 @@
         <button onclick="closeRefreshModal()" class="w-full bg-primary text-black font-bold py-4 rounded-2xl hover:scale-105 transition-transform">DONE</button>
     </div>
 </div>
-
 <!-- ===== NEW: UPLOAD PROGRESS MODAL ===== -->
 <div id="upload-progress-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
@@ -450,7 +466,6 @@
         <p id="upload-progress-pct" class="text-primary font-mono text-sm font-bold">0%</p>
     </div>
 </div>
-
 <!-- ===== NEW: PDF PROGRESS MODAL ===== -->
 <div id="pdf-progress-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
@@ -475,10 +490,8 @@
         <p id="pdf-progress-pct" class="text-primary font-mono text-sm font-bold">0%</p>
     </div>
 </div>
-
 <!-- Off-screen PDF render target -->
 <div id="pdf-temp" style="position:fixed;left:-9999px;top:0;width:794px;background:#0A0A0A;z-index:-1;"></div>
-
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyAxBT0oESoL62oz_x_Z8cMtdENWZPx4tMI",
@@ -496,9 +509,8 @@
     let currentEditingKey = null;
     let pendingApproveKey = null;
     let pendingApproveId = null;
-
+    let pendingDeleteKey = null;
     const sleep = ms => new Promise(r => setTimeout(r, ms));
-
     function showTab(tab) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.getElementById(`tab-${tab}`).classList.add('active');
@@ -506,7 +518,6 @@
         const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(tab));
         if (activeBtn) activeBtn.classList.add('active');
     }
-
     function syncStats() {
         db.ref('stats').on('value', snap => {
             const d = snap.val() || {};
@@ -519,7 +530,6 @@
         const val = document.getElementById(`edit-${key}`).value;
         db.ref(`stats/${key}`).set(val).then(() => alert(`${key} updated!`)).catch(console.error);
     }
-
     function syncHomepage() {
         db.ref('homepage/hero').on('value', snap => {
             const d = snap.val() || {};
@@ -566,7 +576,6 @@
             description: document.getElementById(`service${n}-desc`).value.trim()
         }).then(() => showSuccess(`Card ${n} Saved`, "Service card updated!"));
     }
-
     /* ===== UPLOAD PROGRESS MODAL ===== */
     function showUploadProgress(label) {
         document.getElementById('upload-progress-label').textContent = label || "Sending to Cloudinary...";
@@ -578,7 +587,6 @@
         document.getElementById('upload-progress-pct').textContent = Math.round(p) + '%';
     }
     function hideUploadProgress() { modalHide('upload-progress-modal'); }
-
     function uploadImage(file) {
         return new Promise((resolve, reject) => {
             const fd = new FormData();
@@ -601,7 +609,6 @@
             xhr.send(fd);
         });
     }
-
     async function uploadHeroImage() {
         const file = document.getElementById('hero-image-upload').files[0];
         if (!file) return alert("Please select an image first");
@@ -622,7 +629,6 @@
             showSuccess("CTA Image Uploaded", "URL saved. Click SAVE CTA SECTION to apply.");
         } catch (e) { alert("Upload failed: " + e.message); }
     }
-
     function getPlanDuration(plan) {
         if (!plan) return 30;
         const p = plan.toLowerCase();
@@ -637,18 +643,15 @@
         if (d <= 14) return `<span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 text-xs rounded-full">EXPIRING SOON (${d}d)</span>`;
         return `<span class="bg-green-500/20 text-green-400 px-3 py-1 text-xs rounded-full">ACTIVE</span>`;
     }
-
     /* ===== MODAL HELPERS ===== */
     function modalShow(id) { const m = document.getElementById(id); m.classList.remove('hidden'); m.classList.add('flex'); }
     function modalHide(id) { const m = document.getElementById(id); m.classList.add('hidden'); m.classList.remove('flex'); }
-
     function showSuccess(title, msg) {
         document.getElementById('success-title').textContent = title;
         document.getElementById('success-text').innerHTML = msg;
         modalShow('success-modal');
     }
     function closeSuccessModal() { modalHide('success-modal'); }
-
     /* ===== REFRESH MODAL ===== */
     function refreshMembers() {
         db.ref('members').once('value', snap => {
@@ -662,7 +665,6 @@
         });
     }
     function closeRefreshModal() { modalHide('refresh-modal'); }
-
     /* ===== MEMBERS ===== */
     function listenToPending() {
         db.ref('membershipRequests').on('value', snap => {
@@ -734,9 +736,26 @@
     }
     function deleteRequest(id) { if (confirm('Delete this application?')) db.ref(`membershipRequests/${id}`).remove(); }
     function deleteApprovedMember(key) {
-        if (confirm('Permanently delete this member?')) {
-            db.ref(`members/${key}`).remove().then(() => showSuccess("Member Deleted", "All data removed permanently."));
-        }
+        pendingDeleteKey = key;
+        db.ref(`members/${key}`).once('value', snap => {
+            const m = snap.val() || {};
+            document.getElementById('delete-member-name').innerHTML = `<span class="font-semibold text-white">${m.name || 'Unknown Member'}</span> (#${m.memberNumber || '—'})`;
+            modalShow('delete-confirm-modal');
+        });
+    }
+    function closeDeleteModal() {
+        modalHide('delete-confirm-modal');
+        pendingDeleteKey = null;
+    }
+    function confirmDeleteMember() {
+        if (!pendingDeleteKey) return;
+        db.ref(`members/${pendingDeleteKey}`).remove().then(() => {
+            closeDeleteModal();
+            showSuccess("Member Deleted", "All data removed permanently.");
+        }).catch(e => {
+            closeDeleteModal();
+            alert("Failed to delete: " + e.message);
+        });
     }
     function listenToApprovedMembers() {
         db.ref('members').on('value', snap => { window.allMembers = snap.val() || {}; renderApprovedMembers(); });
@@ -788,7 +807,15 @@
             document.getElementById('modal-name').value = m.name||"";
             document.getElementById('modal-email').value = m.email||"";
             document.getElementById('modal-phone').value = m.phone||"";
-            document.getElementById('modal-plan').value = m.plan||"";
+            const planSelect = document.getElementById('modal-plan');
+            planSelect.value = m.plan || "";
+            if (planSelect.value !== (m.plan || "")) {
+                const opt = document.createElement('option');
+                opt.value = m.plan;
+                opt.textContent = m.plan;
+                planSelect.appendChild(opt);
+                planSelect.value = m.plan;
+            }
             document.getElementById('modal-photo-url').value = m.profileImage||"";
             document.getElementById('modal-preview').src = m.profileImage||"https://via.placeholder.com/80";
             document.getElementById('modal-notes').value = m.notes||"";
@@ -826,7 +853,6 @@
         db.ref(`members/${currentEditingKey}`).update(updates).then(() => { showSuccess("Member Updated","All changes saved!"); closeModal(); });
     }
     function closeModal() { modalHide('edit-modal'); }
-
     function logCheckIn() {
         const id = document.getElementById('checkin-member-id').value.trim();
         if (!id) return alert("Enter Membership ID");
@@ -839,7 +865,6 @@
                 .then(() => { showSuccess("Check-in Logged",`Visit recorded for #${id}`); document.getElementById('checkin-member-id').value=""; });
         });
     }
-
     function listenToPayments() {
         db.ref('members').on('value', snap => {
             window.allMembers = snap.val() || {};
@@ -894,7 +919,6 @@
         });
     }
     function closePaymentConfirmModal() { modalHide('payment-confirm-modal'); }
-
     /* ===== PDF PROGRESS HELPERS ===== */
     function showPdfProgress(label, pct) {
         document.getElementById('pdf-progress-label').textContent = label;
@@ -907,27 +931,21 @@
     }
     function updatePdfProgress(label, pct) { document.getElementById('pdf-progress-label').textContent = label; setPdfPct(pct); }
     function hidePdfProgress() { modalHide('pdf-progress-modal'); }
-
     /* ===== EXPORT PDF ===== */
     async function exportMembersPDF() {
         const members = Object.values(window.allMembers || {});
         if (!members.length) return alert("No members to export");
-
         showPdfProgress("Preparing data...", 5);
         await sleep(150);
-
         const now = Date.now();
-        const activeCount   = members.filter(m => m.expiryDate && m.expiryDate > now + 14*86400000).length;
+        const activeCount = members.filter(m => m.expiryDate && m.expiryDate > now + 14*86400000).length;
         const expiringCount = members.filter(m => m.expiryDate && m.expiryDate > now && m.expiryDate <= now + 14*86400000).length;
-        const expiredCount  = members.filter(m => m.expiryDate && m.expiryDate < now).length;
-        const totalRevenue  = members.reduce((s,m) => s+(m.totalPaid||0), 0);
-
+        const expiredCount = members.filter(m => m.expiryDate && m.expiryDate < now).length;
+        const totalRevenue = members.reduce((s,m) => s+(m.totalPaid||0), 0);
         const planCounts = {};
         members.forEach(m => { const p=m.plan||"Other"; planCounts[p]=(planCounts[p]||0)+1; });
-
         updatePdfProgress("Building layout...", 18);
         await sleep(100);
-
         // Member rows
         let rowsHTML = '';
         members.forEach((m, i) => {
@@ -948,7 +966,6 @@
                     <td style="padding:9px 14px;text-align:center;color:#aaa;font-size:13px;">${m.visitCount||0}</td>
                 </tr>`;
         });
-
         const temp = document.getElementById('pdf-temp');
         temp.innerHTML = `
             <div style="font-family:'Poppins',sans-serif;background:#0A0A0A;color:white;padding:48px;width:794px;min-height:1000px;box-sizing:border-box;">
@@ -1020,10 +1037,8 @@
                     <span style="font-size:10px;color:#444;">${members.length} members · ${new Date().toLocaleString()}</span>
                 </div>
             </div>`;
-
         updatePdfProgress("Rendering charts...", 40);
         await sleep(100);
-
         new Chart(document.getElementById('plan-chart').getContext('2d'), {
             type: 'doughnut',
             data: {
@@ -1032,7 +1047,6 @@
             },
             options: { animation:false, plugins:{ legend:{ position:'bottom', labels:{ color:'#ccc', font:{size:11}, padding:10 } } } }
         });
-
         new Chart(document.getElementById('status-chart').getContext('2d'), {
             type: 'bar',
             data: {
@@ -1041,17 +1055,13 @@
             },
             options: { animation:false, plugins:{legend:{display:false}}, scales:{ y:{ ticks:{color:'#aaa',font:{size:10}}, grid:{color:'rgba(255,255,255,0.05)'} }, x:{ ticks:{color:'#aaa',font:{size:11}}, grid:{display:false} } } }
         });
-
         updatePdfProgress("Capturing layout...", 62);
         await sleep(900);
-
         try {
             updatePdfProgress("Rendering to image...", 75);
             const canvas = await html2canvas(temp.firstElementChild, { scale:2, useCORS:true, backgroundColor:'#0A0A0A', logging:false });
-
             updatePdfProgress("Composing PDF...", 88);
             await sleep(100);
-
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF('p','mm','a4');
             const pageW = pdf.internal.pageSize.getWidth();
@@ -1059,7 +1069,6 @@
             const imgW = pageW;
             const imgH = (canvas.height * imgW) / canvas.width;
             const imgData = canvas.toDataURL('image/jpeg', 0.94);
-
             let heightLeft = imgH;
             let pos = 0;
             pdf.addImage(imgData,'JPEG',0,pos,imgW,imgH);
@@ -1070,12 +1079,9 @@
                 pdf.addImage(imgData,'JPEG',0,pos,imgW,imgH);
                 heightLeft -= pageH;
             }
-
             updatePdfProgress("Saving...", 97);
             await sleep(200);
-
             pdf.save(`fitcore_report_${new Date().toISOString().slice(0,10)}.pdf`);
-
             setPdfPct(100);
             await sleep(350);
             hidePdfProgress();
@@ -1088,7 +1094,6 @@
             alert("PDF generation failed: " + err.message);
         }
     }
-
     window.onload = () => {
         syncStats();
         syncHomepage();
