@@ -153,6 +153,8 @@
             <!-- HOMEPAGE EDITOR -->
             <section class="mb-12">
                 <h2 class="font-heading text-3xl font-bold mb-8">Homepage <span class="text-primary">Content</span></h2>
+                
+                <!-- HERO BANNER EDITOR -->
                 <div class="glass-card p-8 rounded-3xl mb-10 card-hover">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="font-heading text-2xl">Hero Banner</h3>
@@ -183,6 +185,40 @@
                     </div>
                     <button onclick="updateHero()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full md:w-auto">SAVE HERO SECTION</button>
                 </div>
+
+                <!-- CTA SECTION EDITOR -->
+                <div class="glass-card p-8 rounded-3xl mb-10 card-hover">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-heading text-2xl">CTA Section</h3>
+                        <span class="px-4 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Never Give Up</span>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">CTA Heading</label>
+                                <input id="cta-heading" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full text-2xl font-bold outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">CTA Button Text</label>
+                                <input id="cta-button" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Background Image</label>
+                                <input type="file" id="cta-image-upload" accept="image/*" class="hidden">
+                                <button onclick="document.getElementById('cta-image-upload').click()" class="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-2xl text-sm">SELECT IMAGE FILE</button>
+                                <button onclick="uploadCtaImage()" class="mt-3 w-full bg-primary text-black font-bold py-3 rounded-2xl text-sm">UPLOAD TO CLOUDINARY</button>
+                                <input id="cta-image-url" type="hidden">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">CTA Subtext</label>
+                            <textarea id="cta-subtext" rows="9" class="bg-dark border border-white/10 focus:border-primary rounded-3xl px-5 py-4 w-full outline-none resize-y min-h-[220px]"></textarea>
+                        </div>
+                    </div>
+                    <button onclick="updateCta()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full md:w-auto">SAVE CTA SECTION</button>
+                </div>
+
+                <!-- SERVICES CARDS EDITOR -->
                 <div class="glass-card p-8 rounded-3xl card-hover">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="font-heading text-2xl">Services Cards</h3>
@@ -508,6 +544,7 @@
         }
         // HOMEPAGE
         function syncHomepage() {
+            // Hero section
             db.ref('homepage/hero').on('value', (snapshot) => {
                 const data = snapshot.val() || {};
                 document.getElementById('hero-heading').value = data.heading || "";
@@ -515,6 +552,17 @@
                 document.getElementById('hero-button').value = data.buttonText || "";
                 document.getElementById('hero-image-url').value = data.imageUrl || "";
             });
+            
+            // CTA section
+            db.ref('homepage/cta').on('value', (snapshot) => {
+                const data = snapshot.val() || {};
+                document.getElementById('cta-heading').value = data.heading || "";
+                document.getElementById('cta-subtext').value = data.subtext || "";
+                document.getElementById('cta-button').value = data.buttonText || "";
+                document.getElementById('cta-image-url').value = data.imageUrl || "";
+            });
+            
+            // Services
             db.ref('homepage/services').on('value', (snapshot) => {
                 const data = snapshot.val() || {};
                 for (let i = 1; i <= 3; i++) {
@@ -531,6 +579,14 @@
             const imageUrl = document.getElementById('hero-image-url').value.trim();
             db.ref('homepage/hero').update({ heading, subtext, buttonText, imageUrl })
                 .then(() => showSuccess("Hero Saved", "Changes applied successfully!"));
+        }
+        function updateCta() {
+            const heading = document.getElementById('cta-heading').value.trim();
+            const subtext = document.getElementById('cta-subtext').value.trim();
+            const buttonText = document.getElementById('cta-button').value.trim();
+            const imageUrl = document.getElementById('cta-image-url').value.trim();
+            db.ref('homepage/cta').update({ heading, subtext, buttonText, imageUrl })
+                .then(() => showSuccess("CTA Saved", "Changes applied successfully!"));
         }
         function updateService(n) {
             const title = document.getElementById(`service${n}-title`).value.trim();
@@ -564,6 +620,16 @@
             if (url) {
                 document.getElementById('hero-image-url').value = url;
                 showSuccess("Hero Image Uploaded", "URL saved to database on SAVE");
+            }
+        }
+        // CTA IMAGE UPLOAD
+        async function uploadCtaImage() {
+            const file = document.getElementById('cta-image-upload').files[0];
+            if (!file) return alert("Please select an image first");
+            const url = await uploadImage(file);
+            if (url) {
+                document.getElementById('cta-image-url').value = url;
+                showSuccess("CTA Image Uploaded", "URL saved to database on SAVE");
             }
         }
         // PLAN DURATION
