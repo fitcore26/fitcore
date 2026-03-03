@@ -105,7 +105,7 @@
     </aside>
 
     <main class="flex-1 p-6 md:p-12 overflow-y-auto">
-        <!-- DASHBOARD TAB -->
+        <!-- DASHBOARD TAB (unchanged) -->
         <div id="tab-dashboard" class="tab-content active">
             <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
                 <div>
@@ -121,7 +121,7 @@
                 </div>
             </header>
 
-            <!-- STATS -->
+            <!-- STATS (unchanged) -->
             <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <div class="glass-card p-6 rounded-3xl card-hover">
                     <p class="text-gray-400 text-sm mb-2 uppercase tracking-tighter">Site Trainers</p>
@@ -271,7 +271,13 @@
 
         <!-- PAYMENTS TAB -->
         <div id="tab-payments" class="tab-content">
-            <h1 class="font-heading text-4xl font-bold mb-8">Payments <span class="text-primary">&amp; Plans</span></h1>
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="font-heading text-4xl font-bold">Payments <span class="text-primary">&amp; Plans</span></h1>
+                <button onclick="openPaymentModal()" class="bg-primary text-black font-bold uppercase tracking-widest px-8 py-4 rounded-2xl hover:scale-105 transition-all flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" /></svg>
+                    RECORD MANUAL PAYMENT
+                </button>
+            </div>
             <div class="glass-card rounded-3xl overflow-hidden card-hover">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
@@ -291,7 +297,7 @@
         </div>
     </main>
 
-    <!-- EDIT MEMBER MODAL -->
+    <!-- EDIT MEMBER MODAL (unchanged) -->
     <div id="edit-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-lg mx-4 rounded-3xl p-8">
             <h3 class="font-heading text-2xl mb-6">Edit Member</h3>
@@ -340,6 +346,76 @@
         </div>
     </div>
 
+    <!-- APPROVAL CONFIRMATION MODAL -->
+    <div id="approve-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
+        <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-heading text-2xl">Confirm Approval</h3>
+                <button onclick="closeApproveModal()" class="text-gray-400 hover:text-white text-3xl leading-none">×</button>
+            </div>
+            <div class="space-y-5 text-sm">
+                <div class="flex justify-between border-b border-white/10 pb-3">
+                    <span class="text-gray-400">Name</span>
+                    <span id="confirm-name" class="font-semibold"></span>
+                </div>
+                <div class="flex justify-between border-b border-white/10 pb-3">
+                    <span class="text-gray-400">Plan</span>
+                    <span id="confirm-plan" class="font-semibold"></span>
+                </div>
+                <div class="flex justify-between border-b border-white/10 pb-3">
+                    <span class="text-gray-400">Email</span>
+                    <span id="confirm-email" class="font-semibold"></span>
+                </div>
+                <div class="flex justify-between border-b border-white/10 pb-3">
+                    <span class="text-gray-400">Phone</span>
+                    <span id="confirm-phone" class="font-semibold"></span>
+                </div>
+                <div class="pt-4">
+                    <span class="text-xs uppercase tracking-widest text-gray-400 block mb-1">Assigned Membership Number</span>
+                    <div id="confirm-membership-id" class="text-5xl font-bold text-primary font-heading tracking-widest"></div>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-10">
+                <button onclick="closeApproveModal()" class="flex-1 py-4 rounded-2xl border border-white/10 hover:bg-white/5 text-sm font-bold">CANCEL</button>
+                <button onclick="confirmApproval()" class="flex-1 py-4 bg-primary text-black rounded-2xl text-sm font-bold">APPROVE MEMBER</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECORD PAYMENT MODAL -->
+    <div id="payment-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
+        <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-heading text-2xl">Record Manual Payment</h3>
+                <button onclick="closePaymentModal()" class="text-gray-400 hover:text-white text-3xl leading-none">×</button>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Membership ID (4 digits)</label>
+                    <input id="payment-member-id" type="text" maxlength="4" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none text-2xl font-mono text-center" placeholder="1234">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Amount (R)</label>
+                    <input id="payment-amount" type="number" step="0.01" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none text-2xl">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Payment Date</label>
+                    <input id="payment-date" type="date" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Note (optional)</label>
+                    <textarea id="payment-note" rows="2" class="bg-dark border border-white/10 focus:border-primary rounded-3xl px-5 py-4 w-full outline-none resize-y"></textarea>
+                </div>
+            </div>
+
+            <div class="flex gap-3 mt-10">
+                <button onclick="closePaymentModal()" class="flex-1 py-4 rounded-2xl border border-white/10 hover:bg-white/5 text-sm font-bold">CANCEL</button>
+                <button onclick="recordPayment()" class="flex-1 py-4 bg-primary text-black rounded-2xl text-sm font-bold">RECORD PAYMENT</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // CONFIG
         const firebaseConfig = {
@@ -353,13 +429,15 @@
         };
 
         // CLOUDINARY CONFIG - REPLACE WITH YOUR OWN
-        const CLOUD_NAME = "YOUR_CLOUDINARY_CLOUD_NAME";   // ← CHANGE THIS
-        const UPLOAD_PRESET = "YOUR_UNSIGNED_UPLOAD_PRESET"; // ← CHANGE THIS (create unsigned preset in Cloudinary dashboard)
+        const CLOUD_NAME = "YOUR_CLOUDINARY_CLOUD_NAME";
+        const UPLOAD_PRESET = "YOUR_UNSIGNED_UPLOAD_PRESET";
 
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         let currentEditingKey = null;
+        let pendingApproveKey = null;
+        let pendingApproveId = null;
 
         // TAB SWITCHING
         function showTab(tab) {
@@ -422,7 +500,7 @@
                 .then(() => alert(`Service Card ${n} updated successfully!`));
         }
 
-        // CLOUDINARY UPLOAD (API only, no widget)
+        // CLOUDINARY UPLOAD
         async function uploadImage(file) {
             if (!CLOUD_NAME || CLOUD_NAME === "YOUR_CLOUDINARY_CLOUD_NAME") {
                 alert("Please set your Cloudinary CLOUD_NAME and UPLOAD_PRESET in the code!");
@@ -431,7 +509,6 @@
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', UPLOAD_PRESET);
-
             try {
                 const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
                     method: 'POST',
@@ -463,7 +540,7 @@
                             <td class="px-6 py-4 text-sm">${r.email}<br>${r.phone}</td>
                             <td class="px-6 py-4 text-sm text-gray-400">${date}</td>
                             <td class="px-6 py-4 text-center">
-                                <button onclick="approveMember('${key}')" class="bg-green-500 hover:bg-green-600 text-white text-xs px-4 py-2 rounded-xl mr-2">APPROVE</button>
+                                <button onclick="openApproveModal('${key}')" class="bg-green-500 hover:bg-green-600 text-white text-xs px-4 py-2 rounded-xl mr-2">APPROVE</button>
                                 <button onclick="deleteRequest('${key}')" class="text-red-400 hover:text-red-500 text-xs px-3 py-2">DELETE</button>
                             </td>
                         </tr>
@@ -473,25 +550,75 @@
             });
         }
 
-        function approveMember(requestKey) {
+        function getNextMembershipId(callback) {
+            db.ref('counter/membershipNext').transaction((current) => {
+                return (current || 1000) + 1;
+            }, (error, committed, snapshot) => {
+                if (error) {
+                    console.error(error);
+                    callback(null);
+                } else {
+                    callback(snapshot.val());
+                }
+            });
+        }
+
+        function openApproveModal(requestKey) {
+            pendingApproveKey = requestKey;
             db.ref(`membershipRequests/${requestKey}`).once('value', (snap) => {
+                const req = snap.val();
+                getNextMembershipId((id) => {
+                    if (!id) return alert("Failed to generate membership ID");
+                    pendingApproveId = id;
+                    document.getElementById('confirm-name').textContent = req.name || "";
+                    document.getElementById('confirm-plan').textContent = req.plan || "";
+                    document.getElementById('confirm-email').textContent = req.email || "";
+                    document.getElementById('confirm-phone').textContent = req.phone || "";
+                    document.getElementById('confirm-membership-id').textContent = String(id).padStart(4, '0');
+                    document.getElementById('approve-confirm-modal').classList.remove('hidden');
+                    document.getElementById('approve-confirm-modal').classList.add('flex');
+                });
+            });
+        }
+
+        function closeApproveModal() {
+            const modal = document.getElementById('approve-confirm-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function confirmApproval() {
+            if (!pendingApproveKey || !pendingApproveId) return;
+            db.ref(`membershipRequests/${pendingApproveKey}`).once('value', (snap) => {
                 const req = snap.val();
                 const newMemberKey = db.ref('members').push().key;
                 const memberData = {
-                    ...req,
-                    status: "member",
+                    name: req.name,
+                    email: req.email,
+                    phone: req.phone,
+                    plan: req.plan,
                     profileImage: req.profileImage || "https://via.placeholder.com/150",
-                    joined: Date.now()
+                    memberNumber: String(pendingApproveId).padStart(4, '0'),
+                    status: "member",
+                    joined: Date.now(),
+                    totalPaid: 0,
+                    lastPayment: null,
+                    payments: []
                 };
                 const updates = {};
                 updates[`members/${newMemberKey}`] = memberData;
-                updates[`membershipRequests/${requestKey}`] = null;
-                db.ref().update(updates).then(() => alert("Member approved!"));
+                updates[`membershipRequests/${pendingApproveKey}`] = null;
+                db.ref().update(updates).then(() => {
+                    closeApproveModal();
+                    alert(`✅ Member approved successfully!\n\nMembership ID: ${memberData.memberNumber}`);
+                });
             });
         }
 
         function deleteRequest(id) {
-            if (confirm('Delete this application?')) db.ref(`membershipRequests/${id}`).remove();
+            if (confirm('Delete this application permanently?')) {
+                db.ref(`membershipRequests/${id}`).remove();
+            }
         }
 
         function listenToApprovedMembers() {
@@ -505,7 +632,7 @@
                     const row = `
                         <tr class="border-b border-white/5 hover:bg-white/5">
                             <td class="px-6 py-4"><img src="${m.profileImage || 'https://via.placeholder.com/60'}" class="w-10 h-10 rounded-2xl object-cover"></td>
-                            <td class="px-6 py-4 font-medium">${m.name}</td>
+                            <td class="px-6 py-4 font-medium">${m.name}<br><span class="text-[10px] text-primary">#${m.memberNumber || '—'}</span></td>
                             <td class="px-6 py-4">${m.plan}</td>
                             <td class="px-6 py-4"><span class="bg-green-500/20 text-green-400 px-3 py-1 text-xs rounded-full">MEMBER</span></td>
                             <td class="px-6 py-4 text-center">
@@ -554,7 +681,7 @@
             };
             db.ref(`members/${currentEditingKey}`).update(updates)
                 .then(() => {
-                    alert("Member updated!");
+                    alert("Member updated successfully!");
                     closeModal();
                 });
         }
@@ -566,11 +693,10 @@
         }
 
         function refreshMembers() {
-            // just re-sync
             alert("Data refreshed");
         }
 
-        // PAYMENTS TAB
+        // PAYMENTS
         function listenToPayments() {
             db.ref('members').on('value', (snapshot) => {
                 const tbody = document.getElementById('payments-list');
@@ -579,21 +705,74 @@
                 const data = snapshot.val();
                 Object.keys(data).forEach(key => {
                     const m = data[key];
-                    // simple total (you can expand with real payments array)
-                    const total = m.totalPaid ? `R${m.totalPaid}` : "R0";
-                    const last = m.lastPayment ? new Date(m.lastPayment).toLocaleDateString() : "-";
+                    const total = m.totalPaid ? `R${parseFloat(m.totalPaid).toFixed(2)}` : "R0.00";
+                    const last = m.lastPayment ? new Date(m.lastPayment).toLocaleDateString() : "—";
                     const row = `
                         <tr class="border-b border-white/5 hover:bg-white/5">
-                            <td class="px-6 py-4 font-medium">${m.name}</td>
+                            <td class="px-6 py-4 font-medium">${m.name} <span class="text-xs text-primary">(#${m.memberNumber || '—'})</span></td>
                             <td class="px-6 py-4">${m.plan}</td>
                             <td class="px-6 py-4 text-green-400">${total}</td>
                             <td class="px-6 py-4 text-sm text-gray-400">${last}</td>
                             <td class="px-6 py-4 text-center">
-                                <button onclick="alert('Payment history for ${m.name} - extend this function as needed')" class="text-primary hover:underline text-sm">View / Add Payment</button>
+                                <button onclick="openPaymentModal('${m.memberNumber}')" class="text-primary hover:underline text-sm">Add Payment</button>
                             </td>
                         </tr>
                     `;
                     tbody.innerHTML += row;
+                });
+            });
+        }
+
+        function openPaymentModal(preFillId = "") {
+            document.getElementById('payment-member-id').value = preFillId;
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('payment-date').value = today;
+            document.getElementById('payment-amount').value = "";
+            document.getElementById('payment-note').value = "";
+            document.getElementById('payment-modal').classList.remove('hidden');
+            document.getElementById('payment-modal').classList.add('flex');
+        }
+
+        function closePaymentModal() {
+            const modal = document.getElementById('payment-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function recordPayment() {
+            const memberId = document.getElementById('payment-member-id').value.trim();
+            const amount = parseFloat(document.getElementById('payment-amount').value);
+            const date = document.getElementById('payment-date').value;
+            const note = document.getElementById('payment-note').value.trim();
+
+            if (!memberId || !amount || !date) {
+                alert("Membership ID, amount and date are required");
+                return;
+            }
+
+            db.ref('members').orderByChild('memberNumber').equalTo(memberId).once('value', (snap) => {
+                if (!snap.exists()) {
+                    alert("No member found with this Membership ID");
+                    return;
+                }
+                const memberKey = Object.keys(snap.val())[0];
+                const member = snap.val()[memberKey];
+
+                const newPayment = {
+                    date: date,
+                    amount: amount,
+                    note: note || "Manual payment",
+                    timestamp: Date.now()
+                };
+
+                const updates = {};
+                updates[`members/${memberKey}/payments`] = [...(member.payments || []), newPayment];
+                updates[`members/${memberKey}/totalPaid`] = (member.totalPaid || 0) + amount;
+                updates[`members/${memberKey}/lastPayment`] = Date.now();
+
+                db.ref().update(updates).then(() => {
+                    closePaymentModal();
+                    alert(`✅ Payment of R${amount} recorded for #${memberId}`);
                 });
             });
         }
@@ -605,7 +784,7 @@
             listenToPending();
             listenToApprovedMembers();
             listenToPayments();
-            showTab('dashboard'); // default
+            showTab('dashboard');
         };
     </script>
 </body>
