@@ -6,14 +6,13 @@
     <title>FITCORE // Admin Master</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-   
+  
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
     <!-- PDF + Charts + Canvas Capture -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
     <script>
         tailwind.config = {
             theme: {
@@ -35,7 +34,7 @@
     <style>
         body { font-family: 'Poppins', sans-serif; background-color: #0A0A0A; color: white; }
         .font-heading { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
-       
+      
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0A0A0A; }
@@ -91,7 +90,7 @@
         <div class="font-heading text-2xl font-bold tracking-wider text-white mb-10">
             FIT<span class="text-primary">CORE</span> <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded ml-2">ADMIN</span>
         </div>
-       
+      
         <nav class="space-y-2 flex-grow">
             <button onclick="showTab('dashboard')" class="nav-btn active w-full flex items-center gap-3 text-primary bg-primary/10 p-3 rounded-2xl border border-primary/20">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"/></svg>
@@ -111,7 +110,6 @@
             <p class="text-[10px] text-primary truncate">pinotp-d7ef5.firebaseapp.com</p>
         </div>
     </aside>
-
     <main class="flex-1 p-6 md:p-12 overflow-y-auto">
         <!-- DASHBOARD TAB -->
         <div id="tab-dashboard" class="tab-content active">
@@ -128,7 +126,6 @@
                     Live Database Connected
                 </div>
             </header>
-
             <!-- STATS -->
             <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <div class="glass-card p-6 rounded-3xl card-hover">
@@ -153,7 +150,6 @@
                     </div>
                 </div>
             </section>
-
             <!-- HOMEPAGE EDITOR -->
             <section class="mb-12">
                 <h2 class="font-heading text-3xl font-bold mb-8">Homepage <span class="text-primary">Content</span></h2>
@@ -187,7 +183,6 @@
                     </div>
                     <button onclick="updateHero()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full md:w-auto">SAVE HERO SECTION</button>
                 </div>
-
                 <div class="glass-card p-8 rounded-3xl card-hover">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="font-heading text-2xl">Services Cards</h3>
@@ -231,7 +226,6 @@
                 </div>
             </section>
         </div>
-
         <!-- MEMBERS TAB -->
         <div id="tab-members" class="tab-content">
             <div class="flex justify-between items-center mb-6">
@@ -246,7 +240,6 @@
                     </button>
                 </div>
             </div>
-
             <!-- QUICK CHECK-IN -->
             <div class="glass-card p-6 rounded-3xl mb-8 card-hover">
                 <div class="flex items-center gap-4">
@@ -254,7 +247,6 @@
                     <button onclick="logCheckIn()" class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-2xl font-bold">LOG CHECK-IN</button>
                 </div>
             </div>
-
             <!-- PENDING APPLICATIONS -->
             <div class="mb-12">
                 <h3 class="font-heading text-2xl mb-4 flex items-center gap-3">
@@ -277,7 +269,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- APPROVED MEMBERS -->
             <div>
                 <div class="flex justify-between items-center mb-4">
@@ -315,7 +306,6 @@
                 </div>
             </div>
         </div>
-
         <!-- PAYMENTS TAB -->
         <div id="tab-payments" class="tab-content">
             <div class="flex justify-between items-center mb-8">
@@ -344,12 +334,11 @@
             </div>
         </div>
     </main>
-
     <!-- EDIT MEMBER MODAL -->
     <div id="edit-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-2xl mx-4 rounded-3xl p-8 max-h-[90vh] overflow-y-auto">
             <h3 class="font-heading text-2xl mb-6">Edit Member</h3>
-            
+           
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="space-y-6">
                     <div>
@@ -364,7 +353,6 @@
                         </div>
                         <input id="modal-photo-url" type="text" class="hidden">
                     </div>
-
                     <div>
                         <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Name</label>
                         <input id="modal-name" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
@@ -382,7 +370,6 @@
                         <input id="modal-phone" type="tel" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
                     </div>
                 </div>
-
                 <div>
                     <div class="mb-6">
                         <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Notes (admin only)</label>
@@ -394,14 +381,12 @@
                     </div>
                 </div>
             </div>
-
             <div class="flex gap-3 mt-10">
                 <button onclick="closeModal()" class="flex-1 py-4 rounded-2xl border border-white/10 hover:bg-white/5 text-sm font-bold">CANCEL</button>
                 <button onclick="saveMemberEdit()" class="flex-1 py-4 bg-primary text-black rounded-2xl text-sm font-bold">SAVE CHANGES</button>
             </div>
         </div>
     </div>
-
     <!-- APPROVAL CONFIRMATION MODAL -->
     <div id="approve-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
@@ -440,7 +425,6 @@
             </div>
         </div>
     </div>
-
     <!-- RECORD PAYMENT MODAL -->
     <div id="payment-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
@@ -448,7 +432,7 @@
                 <h3 class="font-heading text-2xl">Record Manual Payment</h3>
                 <button onclick="closePaymentModal()" class="text-gray-400 hover:text-white text-3xl leading-none">×</button>
             </div>
-            
+           
             <div class="space-y-6">
                 <div>
                     <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Membership ID (4 digits)</label>
@@ -467,14 +451,12 @@
                     <textarea id="payment-note" rows="2" class="bg-dark border border-white/10 focus:border-primary rounded-3xl px-5 py-4 w-full outline-none resize-y"></textarea>
                 </div>
             </div>
-
             <div class="flex gap-3 mt-10">
                 <button onclick="closePaymentModal()" class="flex-1 py-4 rounded-2xl border border-white/10 hover:bg-white/5 text-sm font-bold">CANCEL</button>
                 <button onclick="recordPayment()" class="flex-1 py-4 bg-primary text-black rounded-2xl text-sm font-bold">RECORD PAYMENT</button>
             </div>
         </div>
     </div>
-
     <!-- PAYMENT CONFIRMATION MODAL -->
     <div id="payment-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
@@ -484,7 +466,6 @@
             <button onclick="closePaymentConfirmModal()" class="w-full bg-primary text-black font-bold py-4 rounded-2xl">CLOSE</button>
         </div>
     </div>
-
     <!-- SUCCESS MODAL -->
     <div id="success-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
@@ -494,10 +475,8 @@
             <button onclick="closeSuccessModal()" class="w-full bg-primary text-black font-bold py-4 rounded-2xl">CLOSE</button>
         </div>
     </div>
-
     <!-- TEMP PDF CONTENT -->
     <div id="pdf-temp" class="hidden"></div>
-
     <script>
         // CONFIG
         const firebaseConfig = {
@@ -509,27 +488,21 @@
             messagingSenderId: "708458917827",
             appId: "1:708458917827:web:375de278577df0adcf9776"
         };
-
         const CLOUD_NAME = "dv5bsbydu";
         const UPLOAD_PRESET = "admin_tlaka";
-
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-
         let currentEditingKey = null;
         let pendingApproveKey = null;
         let pendingApproveId = null;
-
         // TAB SWITCHING
         function showTab(tab) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${tab}`).classList.add('active');
-
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(tab));
             if (activeBtn) activeBtn.classList.add('active');
         }
-
         // STATS
         function syncStats() {
             db.ref('stats').on('value', (snapshot) => {
@@ -545,7 +518,6 @@
                 .then(() => alert(`${key} updated successfully!`))
                 .catch(err => console.error(err));
         }
-
         // HOMEPAGE
         function syncHomepage() {
             db.ref('homepage/hero').on('value', (snapshot) => {
@@ -580,13 +552,8 @@
             db.ref(`homepage/services/${n}`).update({ title, description, imageUrl })
                 .then(() => showSuccess(`Card ${n} Saved`, "Service card updated!"));
         }
-
         // CLOUDINARY UPLOAD (used by ALL images)
         async function uploadImage(file) {
-            if (!CLOUD_NAME || CLOUD_NAME === "dv5bsbydu") {
-                alert("Please set your Cloudinary CLOUD_NAME and UPLOAD_PRESET in the code!");
-                return null;
-            }
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', UPLOAD_PRESET);
@@ -603,7 +570,6 @@
                 return null;
             }
         }
-
         // HOMEPAGE IMAGE UPLOADS
         async function uploadHeroImage() {
             const file = document.getElementById('hero-image-upload').files[0];
@@ -623,7 +589,6 @@
                 showSuccess(`Card ${n} Image Uploaded`, "URL saved to database on SAVE");
             }
         }
-
         // PLAN DURATION
         function getPlanDuration(plan) {
             if (!plan) return 30;
@@ -632,7 +597,6 @@
             if (p.includes('quarter')) return 90;
             return 30;
         }
-
         // STATUS BADGE
         function getStatusBadge(expiryDate) {
             if (!expiryDate) return `<span class="bg-gray-500/20 text-gray-400 px-3 py-1 text-xs rounded-full">NO EXPIRY</span>`;
@@ -641,7 +605,6 @@
             if (daysLeft <= 14) return `<span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 text-xs rounded-full">EXPIRING SOON (${daysLeft}d)</span>`;
             return `<span class="bg-green-500/20 text-green-400 px-3 py-1 text-xs rounded-full">ACTIVE</span>`;
         }
-
         // SUCCESS MODAL
         function showSuccess(title, message) {
             document.getElementById('success-title').textContent = title;
@@ -655,7 +618,6 @@
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
-
         // MEMBERS FUNCTIONS
         function listenToPending() {
             db.ref('membershipRequests').on('value', (snapshot) => {
@@ -682,7 +644,6 @@
                 });
             });
         }
-
         function getNextMembershipId(callback) {
             db.ref('counter/membershipNext').transaction((current) => {
                 return (current || 1000) + 1;
@@ -691,7 +652,6 @@
                 else callback(snapshot.val());
             });
         }
-
         function openApproveModal(requestKey) {
             pendingApproveKey = requestKey;
             db.ref(`membershipRequests/${requestKey}`).once('value', (snap) => {
@@ -709,19 +669,16 @@
                 });
             });
         }
-
         function closeApproveModal() {
             const modal = document.getElementById('approve-confirm-modal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
-
         function copyMembershipId() {
             const id = document.getElementById('confirm-membership-id').textContent;
             navigator.clipboard.writeText(id);
             alert('Membership ID copied!');
         }
-
         function confirmApproval() {
             if (!pendingApproveKey || !pendingApproveId) return;
             db.ref(`membershipRequests/${pendingApproveKey}`).once('value', (snap) => {
@@ -757,11 +714,9 @@
                 });
             });
         }
-
         function deleteRequest(id) {
             if (confirm('Delete this application permanently?')) db.ref(`membershipRequests/${id}`).remove();
         }
-
         function deleteApprovedMember(key) {
             if (confirm('Permanently delete this member?')) {
                 db.ref(`members/${key}`).remove().then(() => {
@@ -769,14 +724,12 @@
                 });
             }
         }
-
         function listenToApprovedMembers() {
             db.ref('members').on('value', (snapshot) => {
                 window.allMembers = snapshot.val() || {};
                 renderApprovedMembers();
             });
         }
-
         function renderApprovedMembers(filtered = null) {
             const tbody = document.getElementById('approved-list');
             tbody.innerHTML = "";
@@ -803,14 +756,13 @@
                 tbody.innerHTML += row;
             });
         }
-
         function filterMembers() {
             const searchTerm = document.getElementById('member-search').value.toLowerCase().trim();
             const statusFilter = document.getElementById('status-filter').value;
             const filtered = {};
             Object.keys(window.allMembers || {}).forEach(key => {
                 const m = window.allMembers[key];
-                const matchesSearch = !searchTerm || 
+                const matchesSearch = !searchTerm ||
                     m.name?.toLowerCase().includes(searchTerm) ||
                     m.memberNumber?.includes(searchTerm) ||
                     m.email?.toLowerCase().includes(searchTerm) ||
@@ -826,7 +778,6 @@
             });
             renderApprovedMembers(filtered);
         }
-
         function editMember(key) {
             currentEditingKey = key;
             db.ref(`members/${key}`).once('value', (snap) => {
@@ -852,7 +803,6 @@
                 document.getElementById('edit-modal').classList.add('flex');
             });
         }
-
         async function uploadMemberPhoto() {
             const fileInput = document.getElementById('modal-photo-upload');
             if (!fileInput.files[0]) return alert("Choose a file first");
@@ -862,7 +812,6 @@
                 document.getElementById('modal-preview').src = url;
             }
         }
-
         function saveMemberEdit() {
             if (!currentEditingKey) return;
             const currentData = window.allMembers[currentEditingKey] || {};
@@ -883,17 +832,14 @@
                     closeModal();
                 });
         }
-
         function closeModal() {
             const modal = document.getElementById('edit-modal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
-
         function refreshMembers() {
             alert("Data refreshed");
         }
-
         function logCheckIn() {
             const id = document.getElementById('checkin-member-id').value.trim();
             if (!id) return alert("Enter Membership ID");
@@ -913,7 +859,6 @@
                 });
             });
         }
-
         function listenToPayments() {
             db.ref('members').on('value', (snapshot) => {
                 window.allMembers = snapshot.val() || {};
@@ -940,7 +885,6 @@
                 });
             });
         }
-
         function openPaymentModal(preFillId = "") {
             document.getElementById('payment-member-id').value = preFillId;
             const today = new Date().toISOString().split('T')[0];
@@ -950,13 +894,11 @@
             document.getElementById('payment-modal').classList.remove('hidden');
             document.getElementById('payment-modal').classList.add('flex');
         }
-
         function closePaymentModal() {
             const modal = document.getElementById('payment-modal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
-
         function recordPayment() {
             const memberId = document.getElementById('payment-member-id').value.trim();
             const amount = parseFloat(document.getElementById('payment-amount').value);
@@ -987,18 +929,15 @@
                 });
             });
         }
-
         function closePaymentConfirmModal() {
             const modal = document.getElementById('payment-confirm-modal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
-
         // BEAUTIFUL PDF REPORT WITH GRAPHS + TABLE
         async function exportMembersPDF() {
             const members = Object.values(window.allMembers || {});
             if (members.length === 0) return alert("No members to export");
-
             const temp = document.getElementById('pdf-temp');
             temp.innerHTML = `
                 <div class="bg-[#0A0A0A] text-white p-12 max-w-5xl mx-auto font-sans" style="width: 210mm; min-height: 297mm;">
@@ -1007,7 +946,6 @@
                         <div class="text-4xl font-bold mt-2">MEMBER REPORT</div>
                         <div class="text-gray-400 mt-1">${new Date().toLocaleDateString('en-GB', {weekday:'long', year:'numeric', month:'long', day:'numeric'})}</div>
                     </div>
-
                     <div class="grid grid-cols-4 gap-6 mb-12">
                         <div class="glass-card p-6 rounded-3xl text-center">
                             <div class="text-xs text-gray-400">TOTAL MEMBERS</div>
@@ -1026,7 +964,6 @@
                             <div class="text-5xl font-bold text-red-400 mt-2">${members.filter(m => m.expiryDate && m.expiryDate < Date.now()).length}</div>
                         </div>
                     </div>
-
                     <h2 class="font-heading text-3xl mb-6 border-b border-white/10 pb-4">All Members</h2>
                     <table class="w-full border-collapse text-sm">
                         <thead>
@@ -1040,7 +977,6 @@
                         </thead>
                         <tbody id="pdf-table-body" class="text-gray-300"></tbody>
                     </table>
-
                     <div class="mt-16 grid grid-cols-2 gap-12">
                         <div>
                             <h3 class="font-heading text-2xl mb-6">Plan Distribution</h3>
@@ -1051,11 +987,9 @@
                             <canvas id="status-chart" width="500" height="500"></canvas>
                         </div>
                     </div>
-
                     <div class="text-center text-gray-500 text-xs mt-20">CONFIDENTIAL • FITCORE GYM MANAGEMENT SYSTEM</div>
                 </div>
             `;
-
             // Populate table
             const tbody = document.getElementById('pdf-table-body');
             members.forEach(m => {
@@ -1070,7 +1004,6 @@
                     </tr>
                 `;
             });
-
             // Plan Pie Chart
             const planCounts = {};
             members.forEach(m => {
@@ -1086,7 +1019,6 @@
                 },
                 options: { plugins: { legend: { position: 'bottom', labels: { color: '#fff', font: { size: 14 } } } } }
             });
-
             // Status Bar Chart
             const active = members.filter(m => m.expiryDate && m.expiryDate > Date.now() + 14*86400000).length;
             const expiring = members.filter(m => m.expiryDate && m.expiryDate > Date.now() && m.expiryDate <= Date.now() + 14*86400000).length;
@@ -1100,7 +1032,6 @@
                 },
                 options: { plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#fff' } } } }
             });
-
             // Wait for charts to render
             setTimeout(async () => {
                 const canvas = await html2canvas(temp.firstElementChild, { scale: 2, useCORS: true });
@@ -1110,23 +1041,19 @@
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
                 let heightLeft = imgHeight;
                 let position = 0;
-
                 pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
                 heightLeft -= pdf.internal.pageSize.getHeight();
-
                 while (heightLeft >= 0) {
                     position = heightLeft - imgHeight;
                     pdf.addPage();
                     pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
                     heightLeft -= pdf.internal.pageSize.getHeight();
                 }
-
                 pdf.save('fitcore_member_report.pdf');
                 temp.innerHTML = '';
                 showSuccess("PDF Report Generated", "Beautiful tables + graphs saved to your device");
             }, 1200);
         }
-
         // START
         window.onload = () => {
             syncStats();
