@@ -510,8 +510,8 @@
             appId: "1:708458917827:web:375de278577df0adcf9776"
         };
 
-        const CLOUD_NAME = "YOUR_CLOUDINARY_CLOUD_NAME";
-        const UPLOAD_PRESET = "YOUR_UNSIGNED_UPLOAD_PRESET";
+        const CLOUD_NAME = "dv5bsbydu";
+        const UPLOAD_PRESET = "admin_tlaka";
 
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
@@ -583,7 +583,7 @@
 
         // CLOUDINARY UPLOAD (used by ALL images)
         async function uploadImage(file) {
-            if (!CLOUD_NAME || CLOUD_NAME === "YOUR_CLOUDINARY_CLOUD_NAME") {
+            if (!CLOUD_NAME || CLOUD_NAME === "dv5bsbydu") {
                 alert("Please set your Cloudinary CLOUD_NAME and UPLOAD_PRESET in the code!");
                 return null;
             }
