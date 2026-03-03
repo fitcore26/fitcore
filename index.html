@@ -328,7 +328,7 @@
         </div>
     </main>
 
-    <!-- EDIT MEMBER MODAL -->
+    <!-- EDIT MEMBER MODAL (unchanged) -->
     <div id="edit-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-2xl mx-4 rounded-3xl p-8 max-h-[90vh] overflow-y-auto">
             <h3 class="font-heading text-2xl mb-6">Edit Member</h3>
@@ -387,7 +387,7 @@
         </div>
     </div>
 
-    <!-- APPROVAL CONFIRMATION MODAL -->
+    <!-- APPROVAL CONFIRMATION MODAL (unchanged) -->
     <div id="approve-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
             <div class="flex justify-between items-center mb-6">
@@ -426,7 +426,7 @@
         </div>
     </div>
 
-    <!-- RECORD PAYMENT MODAL -->
+    <!-- RECORD PAYMENT MODAL (unchanged) -->
     <div id="payment-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
             <div class="flex justify-between items-center mb-6">
@@ -460,13 +460,23 @@
         </div>
     </div>
 
-    <!-- PAYMENT CONFIRMATION MODAL -->
+    <!-- PAYMENT CONFIRMATION MODAL (unchanged) -->
     <div id="payment-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
         <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
             <div class="text-green-400 text-6xl mb-4">✓</div>
             <h3 class="font-heading text-2xl mb-2">Payment Recorded</h3>
             <p id="payment-confirm-text" class="text-gray-400 mb-8"></p>
             <button onclick="closePaymentConfirmModal()" class="w-full bg-primary text-black font-bold py-4 rounded-2xl">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- SUCCESS MODAL (new - for all successful actions) -->
+    <div id="success-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
+        <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
+            <div class="text-green-400 text-6xl mb-4">✓</div>
+            <h3 id="success-title" class="font-heading text-2xl mb-2"></h3>
+            <p id="success-text" class="text-gray-400 mb-8"></p>
+            <button onclick="closeSuccessModal()" class="w-full bg-primary text-black font-bold py-4 rounded-2xl">CLOSE</button>
         </div>
     </div>
 
@@ -483,8 +493,8 @@
         };
 
         // CLOUDINARY CONFIG - REPLACE WITH YOUR OWN
-        const CLOUD_NAME = "dv5bsbydu";
-        const UPLOAD_PRESET = "admin_tlaka";
+        const CLOUD_NAME = "YOUR_CLOUDINARY_CLOUD_NAME";
+        const UPLOAD_PRESET = "YOUR_UNSIGNED_UPLOAD_PRESET";
 
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
@@ -556,7 +566,7 @@
 
         // CLOUDINARY UPLOAD
         async function uploadImage(file) {
-            if (!CLOUD_NAME || CLOUD_NAME === "dv5bsbydu") {
+            if (!CLOUD_NAME || CLOUD_NAME === "YOUR_CLOUDINARY_CLOUD_NAME") {
                 alert("Please set your Cloudinary CLOUD_NAME and UPLOAD_PRESET in the code!");
                 return null;
             }
@@ -584,7 +594,7 @@
             if (p.includes('annual') || p.includes('year')) return 365;
             if (p.includes('quarter')) return 90;
             if (p.includes('month')) return 30;
-            return 30; // default
+            return 30;
         }
 
         // STATUS BADGE
@@ -594,6 +604,20 @@
             if (daysLeft < 0) return `<span class="bg-red-500/20 text-red-400 px-3 py-1 text-xs rounded-full">EXPIRED</span>`;
             if (daysLeft <= 14) return `<span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 text-xs rounded-full">EXPIRING SOON (${daysLeft}d)</span>`;
             return `<span class="bg-green-500/20 text-green-400 px-3 py-1 text-xs rounded-full">ACTIVE</span>`;
+        }
+
+        // SUCCESS MODAL
+        function showSuccess(title, message) {
+            document.getElementById('success-title').textContent = title;
+            document.getElementById('success-text').innerHTML = message;
+            const modal = document.getElementById('success-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeSuccessModal() {
+            const modal = document.getElementById('success-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
 
         // MEMBERS FUNCTIONS
@@ -698,7 +722,7 @@
                 updates[`membershipRequests/${pendingApproveKey}`] = null;
                 db.ref().update(updates).then(() => {
                     closeApproveModal();
-                    alert(`✅ Member approved!\n\nMembership ID: ${memberData.memberNumber}`);
+                    showSuccess("Member Approved", `Membership ID: <span class="font-mono text-primary">${memberData.memberNumber}</span>`);
                 });
             });
         }
@@ -706,6 +730,14 @@
         function deleteRequest(id) {
             if (confirm('Delete this application permanently?')) {
                 db.ref(`membershipRequests/${id}`).remove();
+            }
+        }
+
+        function deleteApprovedMember(key) {
+            if (confirm('Permanently delete this approved member and all their data? This action cannot be undone.')) {
+                db.ref(`members/${key}`).remove().then(() => {
+                    showSuccess("Member Deleted", "The approved member has been permanently removed from the system.");
+                }).catch(err => console.error(err));
             }
         }
 
@@ -735,6 +767,7 @@
                         <td class="px-6 py-4 text-center font-mono">${m.visitCount || 0}</td>
                         <td class="px-6 py-4 text-center">
                             <button onclick="editMember('${key}')" class="text-primary hover:text-white px-4 py-2 text-sm">EDIT</button>
+                            <button onclick="deleteApprovedMember('${key}')" class="text-red-400 hover:text-red-500 px-3 py-2 text-sm ml-2">DELETE</button>
                         </td>
                     </tr>
                 `;
@@ -836,7 +869,7 @@
 
             db.ref(`members/${currentEditingKey}`).update(updates)
                 .then(() => {
-                    alert("Member updated successfully!");
+                    showSuccess("Member Updated", "Changes saved successfully!");
                     closeModal();
                 });
         }
@@ -866,7 +899,7 @@
                     visits: [...(m.visits || []), now]
                 };
                 db.ref(`members/${memberKey}`).update(updates).then(() => {
-                    alert(`✅ Check-in logged for #${id}`);
+                    showSuccess("Check-in Logged", `Successfully recorded visit for #${id}`);
                     document.getElementById('checkin-member-id').value = "";
                 });
             });
