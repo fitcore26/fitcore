@@ -39,12 +39,43 @@
             background: rgba(20, 20, 20, 0.8);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(214, 255, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
+        .glass-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+            border-color: rgba(214, 255, 0, 0.3);
         }
-        .animate-slideIn { animation: slideIn 0.5s ease forwards; }
+        .nav-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .nav-btn:hover {
+            transform: translateX(8px);
+            background-color: rgba(214, 255, 0, 0.15) !important;
+        }
+        .nav-btn.active {
+            background-color: rgba(214, 255, 0, 0.15);
+            border-color: #D6FF00;
+            color: #D6FF00;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal {
+            animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col md:flex-row">
@@ -53,10 +84,18 @@
             FIT<span class="text-primary">CORE</span> <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded ml-2">ADMIN</span>
         </div>
        
-        <nav class="space-y-4 flex-grow">
-            <button class="w-full flex items-center gap-3 text-primary bg-primary/10 p-3 rounded-xl border border-primary/20 transition-all">
+        <nav class="space-y-2 flex-grow">
+            <button onclick="showTab('dashboard')" class="nav-btn active w-full flex items-center gap-3 text-primary bg-primary/10 p-3 rounded-2xl border border-primary/20">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"/></svg>
                 Dashboard
+            </button>
+            <button onclick="showTab('members')" class="nav-btn w-full flex items-center gap-3 text-white hover:text-primary p-3 rounded-2xl border border-transparent hover:border-primary/20">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 01-5.356-1.857M17 20H7m5-2v-2c0-.656-.126-1.284-.356-1.852M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.284.356-1.852m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2" stroke-linecap="round"/></svg>
+                Members
+            </button>
+            <button onclick="showTab('payments')" class="nav-btn w-full flex items-center gap-3 text-white hover:text-primary p-3 rounded-2xl border border-transparent hover:border-primary/20">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-1a2 2 0 01-2-2H9a2 2 0 01-2-2v-1a2 2 0 012-2m0 0V9a2 2 0 012-2" stroke-width="2" stroke-linecap="round"/></svg>
+                Payments
             </button>
         </nav>
         <div class="mt-auto pt-6 border-t border-white/5">
@@ -64,145 +103,243 @@
             <p class="text-[10px] text-primary truncate">pinotp-d7ef5.firebaseapp.com</p>
         </div>
     </aside>
+
     <main class="flex-1 p-6 md:p-12 overflow-y-auto">
-       
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+        <!-- DASHBOARD TAB -->
+        <div id="tab-dashboard" class="tab-content active">
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+                <div>
+                    <h1 class="font-heading text-4xl font-bold">Command <span class="text-primary">Center</span></h1>
+                    <p class="text-gray-400">Manage your athletes and site metrics.</p>
+                </div>
+                <div id="connection-status" class="flex items-center gap-2 text-xs uppercase tracking-widest text-green-500">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    Live Database Connected
+                </div>
+            </header>
+
+            <!-- STATS -->
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="glass-card p-6 rounded-3xl card-hover">
+                    <p class="text-gray-400 text-sm mb-2 uppercase tracking-tighter">Site Trainers</p>
+                    <div class="flex items-center gap-4">
+                        <input type="text" id="edit-trainers" class="bg-dark border border-white/10 rounded-lg px-3 py-2 text-primary font-bold w-24 outline-none focus:border-primary">
+                        <button onclick="updateStat('trainers')" class="bg-primary text-black text-xs font-bold px-4 py-2 rounded-lg hover:scale-105 transition-transform">UPDATE</button>
+                    </div>
+                </div>
+                <div class="glass-card p-6 rounded-3xl card-hover">
+                    <p class="text-gray-400 text-sm mb-2 uppercase tracking-tighter">Active Members</p>
+                    <div class="flex items-center gap-4">
+                        <input type="text" id="edit-members" class="bg-dark border border-white/10 rounded-lg px-3 py-2 text-primary font-bold w-24 outline-none focus:border-primary">
+                        <button onclick="updateStat('members')" class="bg-primary text-black text-xs font-bold px-4 py-2 rounded-lg hover:scale-105 transition-transform">UPDATE</button>
+                    </div>
+                </div>
+                <div class="glass-card p-6 rounded-3xl card-hover">
+                    <p class="text-gray-400 text-sm mb-2 uppercase tracking-tighter">Total Programs</p>
+                    <div class="flex items-center gap-4">
+                        <input type="text" id="edit-programs" class="bg-dark border border-white/10 rounded-lg px-3 py-2 text-primary font-bold w-24 outline-none focus:border-primary">
+                        <button onclick="updateStat('programs')" class="bg-primary text-black text-xs font-bold px-4 py-2 rounded-lg hover:scale-105 transition-transform">UPDATE</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HOMEPAGE EDITOR (unchanged) -->
+            <section class="mb-12">
+                <h2 class="font-heading text-3xl font-bold mb-8">Homepage <span class="text-primary">Content</span></h2>
+                <div class="glass-card p-8 rounded-3xl mb-10 card-hover">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-heading text-2xl">Hero Banner</h3>
+                        <span class="px-4 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Landing Section</span>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Main Heading</label>
+                                <input id="hero-heading" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full text-2xl font-bold outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Button Text</label>
+                                <input id="hero-button" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Background Image URL</label>
+                                <input id="hero-image" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Subtext Paragraph</label>
+                            <textarea id="hero-subtext" rows="9" class="bg-dark border border-white/10 focus:border-primary rounded-3xl px-5 py-4 w-full outline-none resize-y min-h-[220px]"></textarea>
+                        </div>
+                    </div>
+                    <button onclick="updateHero()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full md:w-auto">SAVE HERO SECTION</button>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl card-hover">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-heading text-2xl">Services Cards</h3>
+                        <span class="text-xs text-gray-400">3 cards — title, description & image</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="glass-card p-6 rounded-2xl card-hover">
+                            <div class="uppercase text-[10px] font-bold tracking-widest text-primary mb-4">CARD 01</div>
+                            <input id="service1-title" type="text" class="w-full bg-transparent border-b border-white/30 pb-3 text-lg font-semibold outline-none mb-4">
+                            <textarea id="service1-desc" rows="5" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl p-4 text-sm outline-none mb-4 resize-y"></textarea>
+                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Image URL</label>
+                            <input id="service1-image" type="text" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 text-xs outline-none">
+                            <button onclick="updateService(1)" class="mt-6 w-full bg-primary/10 hover:bg-primary/20 text-primary font-bold py-3 rounded-2xl text-xs tracking-widest">UPDATE CARD 1</button>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl card-hover">
+                            <div class="uppercase text-[10px] font-bold tracking-widest text-primary mb-4">CARD 02</div>
+                            <input id="service2-title" type="text" class="w-full bg-transparent border-b border-white/30 pb-3 text-lg font-semibold outline-none mb-4">
+                            <textarea id="service2-desc" rows="5" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl p-4 text-sm outline-none mb-4 resize-y"></textarea>
+                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Image URL</label>
+                            <input id="service2-image" type="text" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 text-xs outline-none">
+                            <button onclick="updateService(2)" class="mt-6 w-full bg-primary/10 hover:bg-primary/20 text-primary font-bold py-3 rounded-2xl text-xs tracking-widest">UPDATE CARD 2</button>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl card-hover">
+                            <div class="uppercase text-[10px] font-bold tracking-widest text-primary mb-4">CARD 03</div>
+                            <input id="service3-title" type="text" class="w-full bg-transparent border-b border-white/30 pb-3 text-lg font-semibold outline-none mb-4">
+                            <textarea id="service3-desc" rows="5" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl p-4 text-sm outline-none mb-4 resize-y"></textarea>
+                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Image URL</label>
+                            <input id="service3-image" type="text" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 text-xs outline-none">
+                            <button onclick="updateService(3)" class="mt-6 w-full bg-primary/10 hover:bg-primary/20 text-primary font-bold py-3 rounded-2xl text-xs tracking-widest">UPDATE CARD 3</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- MEMBERS TAB -->
+        <div id="tab-members" class="tab-content">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="font-heading text-4xl font-bold">Members <span class="text-primary">Management</span></h1>
+                <button onclick="refreshMembers()" class="bg-primary/10 hover:bg-primary/20 text-primary px-6 py-3 rounded-2xl text-sm font-bold tracking-widest flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.058 11H1M12 3v2m0 16v2m9-9H15m-6 0H3" /></svg>
+                    REFRESH
+                </button>
+            </div>
+
+            <!-- PENDING APPLICATIONS -->
+            <div class="mb-12">
+                <h3 class="font-heading text-2xl mb-4 flex items-center gap-3">
+                    <span class="text-orange-400">●</span> Pending Applications
+                </h3>
+                <div class="glass-card rounded-3xl overflow-hidden card-hover">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="border-b border-white/5 text-gray-400 text-xs uppercase tracking-widest">
+                                    <th class="px-6 py-4">Name</th>
+                                    <th class="px-6 py-4">Plan</th>
+                                    <th class="px-6 py-4">Contact</th>
+                                    <th class="px-6 py-4">Date</th>
+                                    <th class="px-6 py-4 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pending-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APPROVED MEMBERS -->
             <div>
-                <h1 class="font-heading text-4xl font-bold">Command <span class="text-primary">Center</span></h1>
-                <p class="text-gray-400">Manage your athletes and site metrics.</p>
-            </div>
-            <div id="connection-status" class="flex items-center gap-2 text-xs uppercase tracking-widest text-green-500">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-                Live Database Connected
-            </div>
-        </header>
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div class="glass-card p-6 rounded-3xl">
-                <p class="text-gray-400 text-sm mb-2 uppercase tracking-tighter">Site Trainers</p>
-                <div class="flex items-center gap-4">
-                    <input type="text" id="edit-trainers" class="bg-dark border border-white/10 rounded-lg px-3 py-2 text-primary font-bold w-24 outline-none focus:border-primary">
-                    <button onclick="updateStat('trainers')" class="bg-primary text-black text-xs font-bold px-4 py-2 rounded-lg hover:scale-105 transition-transform">UPDATE</button>
+                <h3 class="font-heading text-2xl mb-4 flex items-center gap-3">
+                    <span class="text-green-400">●</span> Approved Members
+                </h3>
+                <div class="glass-card rounded-3xl overflow-hidden card-hover">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="border-b border-white/5 text-gray-400 text-xs uppercase tracking-widest">
+                                    <th class="px-6 py-4">Photo</th>
+                                    <th class="px-6 py-4">Name</th>
+                                    <th class="px-6 py-4">Plan</th>
+                                    <th class="px-6 py-4">Status</th>
+                                    <th class="px-6 py-4 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="approved-list"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="glass-card p-6 rounded-3xl">
-                <p class="text-gray-400 text-sm mb-2 uppercase tracking-tighter">Active Members</p>
-                <div class="flex items-center gap-4">
-                    <input type="text" id="edit-members" class="bg-dark border border-white/10 rounded-lg px-3 py-2 text-primary font-bold w-24 outline-none focus:border-primary">
-                    <button onclick="updateStat('members')" class="bg-primary text-black text-xs font-bold px-4 py-2 rounded-lg hover:scale-105 transition-transform">UPDATE</button>
-                </div>
-            </div>
-            <div class="glass-card p-6 rounded-3xl">
-                <p class="text-gray-400 text-sm mb-2 uppercase tracking-tighter">Total Programs</p>
-                <div class="flex items-center gap-4">
-                    <input type="text" id="edit-programs" class="bg-dark border border-white/10 rounded-lg px-3 py-2 text-primary font-bold w-24 outline-none focus:border-primary">
-                    <button onclick="updateStat('programs')" class="bg-primary text-black text-xs font-bold px-4 py-2 rounded-lg hover:scale-105 transition-transform">UPDATE</button>
-                </div>
-            </div>
-        </section>
+        </div>
 
-        <!-- HOMEPAGE EDITOR - ONLY ADDITION -->
-        <section class="mb-12">
-            <h2 class="font-heading text-3xl font-bold mb-8">Homepage <span class="text-primary">Content</span></h2>
-            
-            <!-- Hero Section -->
-            <div class="glass-card p-8 rounded-3xl mb-10">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="font-heading text-2xl">Hero Banner</h3>
-                    <span class="px-4 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Landing Section</span>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Main Heading</label>
-                            <input id="hero-heading" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full text-2xl font-bold outline-none" placeholder="BUILD YOUR PERFECT BODY">
-                        </div>
-                        <div>
-                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Button Text</label>
-                            <input id="hero-button" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none" placeholder="Get Started Free">
-                        </div>
-                        <div>
-                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Background Image URL</label>
-                            <input id="hero-image" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none" placeholder="https://your-image-url.jpg">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Subtext Paragraph</label>
-                        <textarea id="hero-subtext" rows="9" class="bg-dark border border-white/10 focus:border-primary rounded-3xl px-5 py-4 w-full outline-none resize-y min-h-[220px]" placeholder="Transform your physique and mind with our elite training programs, state-of-the-art equipment, and professional coaching. No excuses, just results."></textarea>
-                    </div>
-                </div>
-                <button onclick="updateHero()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full md:w-auto">SAVE HERO SECTION</button>
-            </div>
-
-            <!-- Services Cards -->
-            <div class="glass-card p-8 rounded-3xl">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="font-heading text-2xl">Services Cards</h3>
-                    <span class="text-xs text-gray-400">3 cards — title, description & image</span>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Card 1 -->
-                    <div class="glass-card p-6 rounded-2xl">
-                        <div class="uppercase text-[10px] font-bold tracking-widest text-primary mb-4">CARD 01</div>
-                        <input id="service1-title" type="text" class="w-full bg-transparent border-b border-white/30 pb-3 text-lg font-semibold outline-none mb-4" placeholder="Card Title">
-                        <textarea id="service1-desc" rows="5" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl p-4 text-sm outline-none mb-4 resize-y" placeholder="Description text..."></textarea>
-                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Image URL</label>
-                        <input id="service1-image" type="text" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 text-xs outline-none" placeholder="https://your-image-url.jpg">
-                        <button onclick="updateService(1)" class="mt-6 w-full bg-primary/10 hover:bg-primary/20 text-primary font-bold py-3 rounded-2xl text-xs tracking-widest">UPDATE CARD 1</button>
-                    </div>
-                    <!-- Card 2 -->
-                    <div class="glass-card p-6 rounded-2xl">
-                        <div class="uppercase text-[10px] font-bold tracking-widest text-primary mb-4">CARD 02</div>
-                        <input id="service2-title" type="text" class="w-full bg-transparent border-b border-white/30 pb-3 text-lg font-semibold outline-none mb-4" placeholder="Card Title">
-                        <textarea id="service2-desc" rows="5" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl p-4 text-sm outline-none mb-4 resize-y" placeholder="Description text..."></textarea>
-                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Image URL</label>
-                        <input id="service2-image" type="text" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 text-xs outline-none" placeholder="https://your-image-url.jpg">
-                        <button onclick="updateService(2)" class="mt-6 w-full bg-primary/10 hover:bg-primary/20 text-primary font-bold py-3 rounded-2xl text-xs tracking-widest">UPDATE CARD 2</button>
-                    </div>
-                    <!-- Card 3 -->
-                    <div class="glass-card p-6 rounded-2xl">
-                        <div class="uppercase text-[10px] font-bold tracking-widest text-primary mb-4">CARD 03</div>
-                        <input id="service3-title" type="text" class="w-full bg-transparent border-b border-white/30 pb-3 text-lg font-semibold outline-none mb-4" placeholder="Card Title">
-                        <textarea id="service3-desc" rows="5" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl p-4 text-sm outline-none mb-4 resize-y" placeholder="Description text..."></textarea>
-                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Image URL</label>
-                        <input id="service3-image" type="text" class="w-full bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 text-xs outline-none" placeholder="https://your-image-url.jpg">
-                        <button onclick="updateService(3)" class="mt-6 w-full bg-primary/10 hover:bg-primary/20 text-primary font-bold py-3 rounded-2xl text-xs tracking-widest">UPDATE CARD 3</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- END OF HOMEPAGE EDITOR -->
-
-        <section class="animate-slideIn">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="font-heading text-2xl font-bold">Membership <span class="text-primary">Requests</span></h3>
-                <span id="request-count" class="bg-white/5 px-4 py-1 rounded-full text-sm border border-white/10">0 Total</span>
-            </div>
-           
-            <div class="glass-card rounded-3xl overflow-hidden">
+        <!-- PAYMENTS TAB -->
+        <div id="tab-payments" class="tab-content">
+            <h1 class="font-heading text-4xl font-bold mb-8">Payments <span class="text-primary">&amp; Plans</span></h1>
+            <div class="glass-card rounded-3xl overflow-hidden card-hover">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead>
                             <tr class="border-b border-white/5 text-gray-400 text-xs uppercase tracking-widest">
-                                <th class="px-6 py-4 font-medium">Name</th>
-                                <th class="px-6 py-4 font-medium">Plan</th>
-                                <th class="px-6 py-4 font-medium">Contact</th>
-                                <th class="px-6 py-4 font-medium">Date</th>
-                                <th class="px-6 py-4 font-medium">Action</th>
+                                <th class="px-6 py-4">Member</th>
+                                <th class="px-6 py-4">Current Plan</th>
+                                <th class="px-6 py-4">Total Paid</th>
+                                <th class="px-6 py-4">Last Payment</th>
+                                <th class="px-6 py-4 text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="request-list">
-                            </tbody>
+                        <tbody id="payments-list"></tbody>
                     </table>
                 </div>
-                <div id="empty-state" class="hidden p-20 text-center">
-                    <p class="text-gray-500">No pending requests found.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- EDIT MEMBER MODAL -->
+    <div id="edit-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
+        <div class="modal glass-card w-full max-w-lg mx-4 rounded-3xl p-8">
+            <h3 class="font-heading text-2xl mb-6">Edit Member</h3>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Profile Photo</label>
+                    <div class="flex items-center gap-4">
+                        <img id="modal-preview" src="https://via.placeholder.com/80" class="w-20 h-20 rounded-2xl object-cover border border-white/10">
+                        <div class="flex-1">
+                            <input type="file" id="modal-photo-upload" accept="image/*" class="hidden">
+                            <button onclick="document.getElementById('modal-photo-upload').click()" class="bg-white/10 hover:bg-white/20 text-white text-sm px-5 py-2.5 rounded-2xl w-full">
+                                Choose New Photo
+                            </button>
+                            <button onclick="uploadMemberPhoto()" class="mt-2 w-full bg-primary text-black text-sm font-bold py-2.5 rounded-2xl">UPLOAD TO CLOUDINARY</button>
+                        </div>
+                    </div>
+                    <input id="modal-photo-url" type="text" class="hidden">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Name</label>
+                        <input id="modal-name" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Plan</label>
+                        <input id="modal-plan" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Email</label>
+                    <input id="modal-email" type="email" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Phone</label>
+                    <input id="modal-phone" type="tel" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
                 </div>
             </div>
-        </section>
-    </main>
+
+            <div class="flex gap-3 mt-10">
+                <button onclick="closeModal()" class="flex-1 py-4 rounded-2xl border border-white/10 hover:bg-white/5 text-sm font-bold">CANCEL</button>
+                <button onclick="saveMemberEdit()" class="flex-1 py-4 bg-primary text-black rounded-2xl text-sm font-bold">SAVE CHANGES</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // CONFIG
         const firebaseConfig = {
@@ -214,10 +351,27 @@
             messagingSenderId: "708458917827",
             appId: "1:708458917827:web:375de278577df0adcf9776"
         };
-        // INITIALIZE
+
+        // CLOUDINARY CONFIG - REPLACE WITH YOUR OWN
+        const CLOUD_NAME = "YOUR_CLOUDINARY_CLOUD_NAME";   // ← CHANGE THIS
+        const UPLOAD_PRESET = "YOUR_UNSIGNED_UPLOAD_PRESET"; // ← CHANGE THIS (create unsigned preset in Cloudinary dashboard)
+
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        // 1. SYNC SITE STATS
+
+        let currentEditingKey = null;
+
+        // TAB SWITCHING
+        function showTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(tab));
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+
+        // STATS (unchanged)
         function syncStats() {
             db.ref('stats').on('value', (snapshot) => {
                 const data = snapshot.val() || {};
@@ -226,16 +380,15 @@
                 document.getElementById('edit-programs').value = data.programs || "30+";
             });
         }
-        // 2. UPDATE SITE STATS
         function updateStat(key) {
             const val = document.getElementById(`edit-${key}`).value;
             db.ref(`stats/${key}`).set(val)
                 .then(() => alert(`${key} updated successfully!`))
                 .catch(err => console.error(err));
         }
-        // NEW: SYNC HOMEPAGE CONTENT
+
+        // HOMEPAGE (unchanged)
         function syncHomepage() {
-            // Hero
             db.ref('homepage/hero').on('value', (snapshot) => {
                 const data = snapshot.val() || {};
                 document.getElementById('hero-heading').value = data.heading || "";
@@ -243,7 +396,6 @@
                 document.getElementById('hero-button').value = data.buttonText || "";
                 document.getElementById('hero-image').value = data.imageUrl || "";
             });
-            // Services (3 cards)
             db.ref('homepage/services').on('value', (snapshot) => {
                 const data = snapshot.val() || {};
                 for (let i = 1; i <= 3; i++) {
@@ -254,88 +406,206 @@
                 }
             });
         }
-        // NEW: UPDATE HERO
         function updateHero() {
             const heading = document.getElementById('hero-heading').value.trim();
             const subtext = document.getElementById('hero-subtext').value.trim();
             const buttonText = document.getElementById('hero-button').value.trim();
             const imageUrl = document.getElementById('hero-image').value.trim();
-            db.ref('homepage/hero').update({
-                heading,
-                subtext,
-                buttonText,
-                imageUrl
-            }).then(() => alert('Hero section updated successfully!'))
-              .catch(err => console.error(err));
+            db.ref('homepage/hero').update({ heading, subtext, buttonText, imageUrl })
+                .then(() => alert('Hero section updated successfully!'));
         }
-        // NEW: UPDATE SERVICE CARD
         function updateService(n) {
             const title = document.getElementById(`service${n}-title`).value.trim();
             const description = document.getElementById(`service${n}-desc`).value.trim();
             const imageUrl = document.getElementById(`service${n}-image`).value.trim();
-            db.ref(`homepage/services/${n}`).update({
-                title,
-                description,
-                imageUrl
-            }).then(() => alert(`Service Card ${n} updated successfully!`))
-              .catch(err => console.error(err));
+            db.ref(`homepage/services/${n}`).update({ title, description, imageUrl })
+                .then(() => alert(`Service Card ${n} updated successfully!`));
         }
-        // 3. LISTEN FOR NEW REQUESTS
-        function listenToRequests() {
+
+        // CLOUDINARY UPLOAD (API only, no widget)
+        async function uploadImage(file) {
+            if (!CLOUD_NAME || CLOUD_NAME === "YOUR_CLOUDINARY_CLOUD_NAME") {
+                alert("Please set your Cloudinary CLOUD_NAME and UPLOAD_PRESET in the code!");
+                return null;
+            }
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', UPLOAD_PRESET);
+
+            try {
+                const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                return data.secure_url;
+            } catch (err) {
+                console.error(err);
+                alert("Upload failed");
+                return null;
+            }
+        }
+
+        // MEMBERS FUNCTIONS
+        function listenToPending() {
             db.ref('membershipRequests').on('value', (snapshot) => {
-                const list = document.getElementById('request-list');
-                const empty = document.getElementById('empty-state');
-                const count = document.getElementById('request-count');
-                list.innerHTML = "";
-               
-                if (!snapshot.exists()) {
-                    empty.classList.remove('hidden');
-                    count.innerText = "0 Total";
-                    return;
-                }
-                empty.classList.add('hidden');
+                const tbody = document.getElementById('pending-list');
+                tbody.innerHTML = "";
+                if (!snapshot.exists()) return;
                 const data = snapshot.val();
-                const keys = Object.keys(data).reverse(); // Newest first
-                count.innerText = `${keys.length} Total`;
-                keys.forEach(key => {
-                    const req = data[key];
-                    const date = new Date(req.timestamp).toLocaleDateString();
-                   
+                Object.keys(data).forEach(key => {
+                    const r = data[key];
+                    const date = new Date(r.timestamp).toLocaleDateString();
                     const row = `
-                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
-                            <td class="px-6 py-4">
-                                <div class="font-bold text-white">${req.name}</div>
-                                <div class="text-xs text-gray-500">${req.email}</div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="bg-primary/10 text-primary text-[10px] px-3 py-1 rounded-full font-bold uppercase border border-primary/20">
-                                    ${req.plan}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-sm text-gray-300">${req.phone}</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">${date}</td>
-                            <td class="px-6 py-4">
-                                <button onclick="deleteRequest('${key}')" class="text-gray-600 hover:text-red-500 transition-colors p-2">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                </button>
+                        <tr class="border-b border-white/5 hover:bg-white/5">
+                            <td class="px-6 py-4 font-medium">${r.name}</td>
+                            <td class="px-6 py-4"><span class="bg-primary/10 text-primary px-3 py-1 text-xs rounded-full">${r.plan}</span></td>
+                            <td class="px-6 py-4 text-sm">${r.email}<br>${r.phone}</td>
+                            <td class="px-6 py-4 text-sm text-gray-400">${date}</td>
+                            <td class="px-6 py-4 text-center">
+                                <button onclick="approveMember('${key}')" class="bg-green-500 hover:bg-green-600 text-white text-xs px-4 py-2 rounded-xl mr-2">APPROVE</button>
+                                <button onclick="deleteRequest('${key}')" class="text-red-400 hover:text-red-500 text-xs px-3 py-2">DELETE</button>
                             </td>
                         </tr>
                     `;
-                    list.innerHTML += row;
+                    tbody.innerHTML += row;
                 });
             });
         }
-        // 4. DELETE REQUEST
+
+        function approveMember(requestKey) {
+            db.ref(`membershipRequests/${requestKey}`).once('value', (snap) => {
+                const req = snap.val();
+                const newMemberKey = db.ref('members').push().key;
+                const memberData = {
+                    ...req,
+                    status: "member",
+                    profileImage: req.profileImage || "https://via.placeholder.com/150",
+                    joined: Date.now()
+                };
+                const updates = {};
+                updates[`members/${newMemberKey}`] = memberData;
+                updates[`membershipRequests/${requestKey}`] = null;
+                db.ref().update(updates).then(() => alert("Member approved!"));
+            });
+        }
+
         function deleteRequest(id) {
-            if(confirm('Archive this request?')) {
-                db.ref(`membershipRequests/${id}`).remove();
+            if (confirm('Delete this application?')) db.ref(`membershipRequests/${id}`).remove();
+        }
+
+        function listenToApprovedMembers() {
+            db.ref('members').on('value', (snapshot) => {
+                const tbody = document.getElementById('approved-list');
+                tbody.innerHTML = "";
+                if (!snapshot.exists()) return;
+                const data = snapshot.val();
+                Object.keys(data).forEach(key => {
+                    const m = data[key];
+                    const row = `
+                        <tr class="border-b border-white/5 hover:bg-white/5">
+                            <td class="px-6 py-4"><img src="${m.profileImage || 'https://via.placeholder.com/60'}" class="w-10 h-10 rounded-2xl object-cover"></td>
+                            <td class="px-6 py-4 font-medium">${m.name}</td>
+                            <td class="px-6 py-4">${m.plan}</td>
+                            <td class="px-6 py-4"><span class="bg-green-500/20 text-green-400 px-3 py-1 text-xs rounded-full">MEMBER</span></td>
+                            <td class="px-6 py-4 text-center">
+                                <button onclick="editMember('${key}')" class="text-primary hover:text-white px-4 py-2 text-sm">EDIT</button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            });
+        }
+
+        function editMember(key) {
+            currentEditingKey = key;
+            db.ref(`members/${key}`).once('value', (snap) => {
+                const m = snap.val();
+                document.getElementById('modal-name').value = m.name || "";
+                document.getElementById('modal-email').value = m.email || "";
+                document.getElementById('modal-phone').value = m.phone || "";
+                document.getElementById('modal-plan').value = m.plan || "";
+                document.getElementById('modal-photo-url').value = m.profileImage || "";
+                document.getElementById('modal-preview').src = m.profileImage || "https://via.placeholder.com/80";
+                document.getElementById('edit-modal').classList.remove('hidden');
+                document.getElementById('edit-modal').classList.add('flex');
+            });
+        }
+
+        async function uploadMemberPhoto() {
+            const fileInput = document.getElementById('modal-photo-upload');
+            if (!fileInput.files[0]) return alert("Choose a file first");
+            const url = await uploadImage(fileInput.files[0]);
+            if (url) {
+                document.getElementById('modal-photo-url').value = url;
+                document.getElementById('modal-preview').src = url;
             }
         }
+
+        function saveMemberEdit() {
+            if (!currentEditingKey) return;
+            const updates = {
+                name: document.getElementById('modal-name').value,
+                email: document.getElementById('modal-email').value,
+                phone: document.getElementById('modal-phone').value,
+                plan: document.getElementById('modal-plan').value,
+                profileImage: document.getElementById('modal-photo-url').value || "https://via.placeholder.com/150"
+            };
+            db.ref(`members/${currentEditingKey}`).update(updates)
+                .then(() => {
+                    alert("Member updated!");
+                    closeModal();
+                });
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('edit-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function refreshMembers() {
+            // just re-sync
+            alert("Data refreshed");
+        }
+
+        // PAYMENTS TAB
+        function listenToPayments() {
+            db.ref('members').on('value', (snapshot) => {
+                const tbody = document.getElementById('payments-list');
+                tbody.innerHTML = "";
+                if (!snapshot.exists()) return;
+                const data = snapshot.val();
+                Object.keys(data).forEach(key => {
+                    const m = data[key];
+                    // simple total (you can expand with real payments array)
+                    const total = m.totalPaid ? `R${m.totalPaid}` : "R0";
+                    const last = m.lastPayment ? new Date(m.lastPayment).toLocaleDateString() : "-";
+                    const row = `
+                        <tr class="border-b border-white/5 hover:bg-white/5">
+                            <td class="px-6 py-4 font-medium">${m.name}</td>
+                            <td class="px-6 py-4">${m.plan}</td>
+                            <td class="px-6 py-4 text-green-400">${total}</td>
+                            <td class="px-6 py-4 text-sm text-gray-400">${last}</td>
+                            <td class="px-6 py-4 text-center">
+                                <button onclick="alert('Payment history for ${m.name} - extend this function as needed')" class="text-primary hover:underline text-sm">View / Add Payment</button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            });
+        }
+
         // START
         window.onload = () => {
             syncStats();
-            syncHomepage();   // NEW
-            listenToRequests();
+            syncHomepage();
+            listenToPending();
+            listenToApprovedMembers();
+            listenToPayments();
+            showTab('dashboard'); // default
         };
     </script>
 </body>
