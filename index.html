@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FITCORE // Admin Master</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#D6FF00',
+                        dark: '#0A0A0A',
+                        card: '#141414',
+                        accent: '#1F1F1F'
+                    },
+                    fontFamily: {
+                        heading: ['Oswald', 'sans-serif'],
+                        body: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #0A0A0A; color: white; }
+        .font-heading { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #D6FF00; border-radius: 10px; }
+
+        .glass-card {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(214, 255, 0, 0.1);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .animate-slideIn { animation: slideIn 0.5s ease forwards; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row">
+
+    <aside class="w-full md:w-64 bg-card border-r border-white/5 p-6 flex flex-col">
+        <div class="font-heading text-2xl font-bold tracking-wider text-white mb-10">
+            FIT<span class="text-primary">CORE</span> <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded ml-2">ADMIN</span>
+        </div>
+        
+        <nav class="space-y-4 flex-grow">
+            <button class="w-full flex items-center gap-3 text-primary bg-primary/10 p-3 rounded-xl border border-primary/20 transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"/></svg>
+                Dashboard
+            </button>
+        </nav>
+
+        <div class="mt-auto pt-6 border-t border-white/5">
+            <p class="text-xs text-gray-500">Connected to:</p>
+            <p class="text-[10px] text-primary truncate">pinotp-d7ef5.firebaseapp.com</p>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-6 md:p-12 overflow-y-auto">
+        
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+            <div>
+                <h1 class="font-heading text-4xl font-bold">Command <span class="text-primary">Center</span></h1>
+                <p class="text-gray-400">Manage your athletes and site metrics.</p>
+            </div>
+            <div id="connection-status" class="flex items-center gap-2 text-xs uppercase tracking-widest text-green-500">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                Live Database Connected
+            </div>
+        </header>
+
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="glass-card p-6 rounded-3xl">
+                <p class="text-gray-400 text-sm mb-2 uppercase tracking-tighter">Site Trainers</p>
+                <div class="flex items-center gap-4">
+                    <input type="text" id="edit-trainers" class="bg-dark border border-white/10 rounded-lg px-3 py-2 text-primary font-bold w-24 outline-none focus:border-primary">
+                    <button onclick="updateStat('trainers')" class="bg-primary text-black text-xs font-bold px-4 py-2 rounded-lg hover:scale-105 transition-transform">UPDATE</button>
+                </div>
+            </div>
+            <div class="glass-card p-6 rounded-3xl">
+                <p class="text-gray-400 text-sm mb-2 uppercase tracking-tighter">Active Members</p>
+                <div class="flex items-center gap-4">
+                    <input type="text" id="edit-members" class="bg-dark border border-white/10 rounded-lg px-3 py-2 text-primary font-bold w-24 outline-none focus:border-primary">
+                    <button onclick="updateStat('members')" class="bg-primary text-black text-xs font-bold px-4 py-2 rounded-lg hover:scale-105 transition-transform">UPDATE</button>
+                </div>
+            </div>
+            <div class="glass-card p-6 rounded-3xl">
+                <p class="text-gray-400 text-sm mb-2 uppercase tracking-tighter">Total Programs</p>
+                <div class="flex items-center gap-4">
+                    <input type="text" id="edit-programs" class="bg-dark border border-white/10 rounded-lg px-3 py-2 text-primary font-bold w-24 outline-none focus:border-primary">
+                    <button onclick="updateStat('programs')" class="bg-primary text-black text-xs font-bold px-4 py-2 rounded-lg hover:scale-105 transition-transform">UPDATE</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="animate-slideIn">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-heading text-2xl font-bold">Membership <span class="text-primary">Requests</span></h3>
+                <span id="request-count" class="bg-white/5 px-4 py-1 rounded-full text-sm border border-white/10">0 Total</span>
+            </div>
+            
+            <div class="glass-card rounded-3xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-white/5 text-gray-400 text-xs uppercase tracking-widest">
+                                <th class="px-6 py-4 font-medium">Name</th>
+                                <th class="px-6 py-4 font-medium">Plan</th>
+                                <th class="px-6 py-4 font-medium">Contact</th>
+                                <th class="px-6 py-4 font-medium">Date</th>
+                                <th class="px-6 py-4 font-medium">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="request-list">
+                            </tbody>
+                    </table>
+                </div>
+                <div id="empty-state" class="hidden p-20 text-center">
+                    <p class="text-gray-500">No pending requests found.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyAxBT0oESoL62oz_x_Z8cMtdENWZPx4tMI",
+            authDomain: "pinotp-d7ef5.firebaseapp.com",
+            databaseURL: "https://pinotp-d7ef5-default-rtdb.firebaseio.com",
+            projectId: "pinotp-d7ef5",
+            storageBucket: "pinotp-d7ef5.firebasestorage.app",
+            messagingSenderId: "708458917827",
+            appId: "1:708458917827:web:375de278577df0adcf9776"
+        };
+
+        // INITIALIZE
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // 1. SYNC SITE STATS
+        function syncStats() {
+            db.ref('stats').on('value', (snapshot) => {
+                const data = snapshot.val() || {};
+                document.getElementById('edit-trainers').value = data.trainers || "50+";
+                document.getElementById('edit-members').value = data.members || "970+";
+                document.getElementById('edit-programs').value = data.programs || "30+";
+            });
+        }
+
+        // 2. UPDATE SITE STATS
+        function updateStat(key) {
+            const val = document.getElementById(`edit-${key}`).value;
+            db.ref(`stats/${key}`).set(val)
+                .then(() => alert(`${key} updated successfully!`))
+                .catch(err => console.error(err));
+        }
+
+        // 3. LISTEN FOR NEW REQUESTS
+        function listenToRequests() {
+            db.ref('membershipRequests').on('value', (snapshot) => {
+                const list = document.getElementById('request-list');
+                const empty = document.getElementById('empty-state');
+                const count = document.getElementById('request-count');
+                list.innerHTML = "";
+                
+                if (!snapshot.exists()) {
+                    empty.classList.remove('hidden');
+                    count.innerText = "0 Total";
+                    return;
+                }
+
+                empty.classList.add('hidden');
+                const data = snapshot.val();
+                const keys = Object.keys(data).reverse(); // Newest first
+                count.innerText = `${keys.length} Total`;
+
+                keys.forEach(key => {
+                    const req = data[key];
+                    const date = new Date(req.timestamp).toLocaleDateString();
+                    
+                    const row = `
+                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
+                            <td class="px-6 py-4">
+                                <div class="font-bold text-white">${req.name}</div>
+                                <div class="text-xs text-gray-500">${req.email}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="bg-primary/10 text-primary text-[10px] px-3 py-1 rounded-full font-bold uppercase border border-primary/20">
+                                    ${req.plan}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-300">${req.phone}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">${date}</td>
+                            <td class="px-6 py-4">
+                                <button onclick="deleteRequest('${key}')" class="text-gray-600 hover:text-red-500 transition-colors p-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    list.innerHTML += row;
+                });
+            });
+        }
+
+        // 4. DELETE REQUEST
+        function deleteRequest(id) {
+            if(confirm('Archive this request?')) {
+                db.ref(`membershipRequests/${id}`).remove();
+            }
+        }
+
+        // START
+        window.onload = () => {
+            syncStats();
+            listenToRequests();
+        };
+    </script>
+</body>
+</html>
