@@ -565,7 +565,7 @@
     const headingValue = document.getElementById('hero-heading').value.trim();
     const words = headingValue.split(/\s+/);
     const lastWord = words.pop();
-    const styledHeading = words.join(' ') + (words.length > 0 ? ' ' : '') + '<span class="outline">' + lastWord + '</span>';
+    const styledHeading = words.join(' ') + (words.length > 0 ? ' ' : '') + '<span class="primary">' + lastWord + '</span>';
     db.ref('homepage/hero').update({
         heading: styledHeading,
         subtext: document.getElementById('hero-subtext').value.trim(),
