@@ -76,6 +76,9 @@
             from { opacity: 0; transform: scale(0.8); }
             to { opacity: 1; transform: scale(1); }
         }
+        .timeline-item { position: relative; padding-left: 24px; }
+        .timeline-item::before { content: ''; position: absolute; left: 8px; top: 6px; bottom: -20px; width: 2px; background: rgba(214,255,0,0.2); }
+        .timeline-item:last-child::before { display: none; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col md:flex-row">
@@ -214,15 +217,28 @@
 
         <!-- MEMBERS TAB -->
         <div id="tab-members" class="tab-content">
-            <div class="flex justify-between items-center mb-8">
+            <div class="flex justify-between items-center mb-6">
                 <h1 class="font-heading text-4xl font-bold">Members <span class="text-primary">Management</span></h1>
-                <button onclick="refreshMembers()" class="bg-primary/10 hover:bg-primary/20 text-primary px-6 py-3 rounded-2xl text-sm font-bold tracking-widest flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.058 11H1M12 3v2m0 16v2m9-9H15m-6 0H3" /></svg>
-                    REFRESH
-                </button>
+                <div class="flex gap-3">
+                    <button onclick="exportMembersCSV()" class="bg-primary/10 hover:bg-primary/20 text-primary px-6 py-3 rounded-2xl text-sm font-bold tracking-widest flex items-center gap-2">
+                        EXPORT MEMBERS CSV
+                    </button>
+                    <button onclick="refreshMembers()" class="bg-primary/10 hover:bg-primary/20 text-primary px-6 py-3 rounded-2xl text-sm font-bold tracking-widest flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.058 11H1M12 3v2m0 16v2m9-9H15m-6 0H3" /></svg>
+                        REFRESH
+                    </button>
+                </div>
             </div>
 
-            <!-- PENDING APPLICATIONS -->
+            <!-- QUICK CHECK-IN -->
+            <div class="glass-card p-6 rounded-3xl mb-8 card-hover">
+                <div class="flex items-center gap-4">
+                    <input id="checkin-member-id" type="text" maxlength="4" placeholder="Membership ID (e.g. 1001)" class="flex-1 bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 outline-none text-lg font-mono">
+                    <button onclick="logCheckIn()" class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-2xl font-bold">LOG CHECK-IN</button>
+                </div>
+            </div>
+
+            <!-- PENDING APPLICATIONS (unchanged) -->
             <div class="mb-12">
                 <h3 class="font-heading text-2xl mb-4 flex items-center gap-3">
                     <span class="text-orange-400">●</span> Pending Applications
@@ -247,18 +263,32 @@
 
             <!-- APPROVED MEMBERS -->
             <div>
-                <h3 class="font-heading text-2xl mb-4 flex items-center gap-3">
-                    <span class="text-green-400">●</span> Approved Members
-                </h3>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-heading text-2xl flex items-center gap-3">
+                        <span class="text-green-400">●</span> Approved Members
+                    </h3>
+                    <div class="flex items-center gap-4">
+                        <input id="member-search" type="text" placeholder="Search name, ID, email, phone..." onkeyup="filterMembers()" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-80 outline-none">
+                        <select id="status-filter" onchange="filterMembers()" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 outline-none">
+                            <option value="all">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="expiring">Expiring Soon</option>
+                            <option value="expired">Expired</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="glass-card rounded-3xl overflow-hidden card-hover">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
                             <thead>
                                 <tr class="border-b border-white/5 text-gray-400 text-xs uppercase tracking-widest">
                                     <th class="px-6 py-4">Photo</th>
+                                    <th class="px-6 py-4">Member #</th>
                                     <th class="px-6 py-4">Name</th>
                                     <th class="px-6 py-4">Plan</th>
+                                    <th class="px-6 py-4">Expiry</th>
                                     <th class="px-6 py-4">Status</th>
+                                    <th class="px-6 py-4">Visits</th>
                                     <th class="px-6 py-4 text-center">Actions</th>
                                 </tr>
                             </thead>
@@ -286,6 +316,7 @@
                                 <th class="px-6 py-4">Member</th>
                                 <th class="px-6 py-4">Current Plan</th>
                                 <th class="px-6 py-4">Total Paid</th>
+                                <th class="px-6 py-4">Expiry</th>
                                 <th class="px-6 py-4">Last Payment</th>
                                 <th class="px-6 py-4 text-center">Action</th>
                             </tr>
@@ -297,28 +328,27 @@
         </div>
     </main>
 
-    <!-- EDIT MEMBER MODAL (unchanged) -->
+    <!-- EDIT MEMBER MODAL -->
     <div id="edit-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
-        <div class="modal glass-card w-full max-w-lg mx-4 rounded-3xl p-8">
+        <div class="modal glass-card w-full max-w-2xl mx-4 rounded-3xl p-8 max-h-[90vh] overflow-y-auto">
             <h3 class="font-heading text-2xl mb-6">Edit Member</h3>
             
-            <div class="space-y-6">
-                <div>
-                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Profile Photo</label>
-                    <div class="flex items-center gap-4">
-                        <img id="modal-preview" src="https://via.placeholder.com/80" class="w-20 h-20 rounded-2xl object-cover border border-white/10">
-                        <div class="flex-1">
-                            <input type="file" id="modal-photo-upload" accept="image/*" class="hidden">
-                            <button onclick="document.getElementById('modal-photo-upload').click()" class="bg-white/10 hover:bg-white/20 text-white text-sm px-5 py-2.5 rounded-2xl w-full">
-                                Choose New Photo
-                            </button>
-                            <button onclick="uploadMemberPhoto()" class="mt-2 w-full bg-primary text-black text-sm font-bold py-2.5 rounded-2xl">UPLOAD TO CLOUDINARY</button>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Left column -->
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Profile Photo</label>
+                        <div class="flex items-center gap-4">
+                            <img id="modal-preview" src="https://via.placeholder.com/80" class="w-20 h-20 rounded-2xl object-cover border border-white/10">
+                            <div class="flex-1">
+                                <input type="file" id="modal-photo-upload" accept="image/*" class="hidden">
+                                <button onclick="document.getElementById('modal-photo-upload').click()" class="bg-white/10 hover:bg-white/20 text-white text-sm px-5 py-2.5 rounded-2xl w-full">Choose New Photo</button>
+                                <button onclick="uploadMemberPhoto()" class="mt-2 w-full bg-primary text-black text-sm font-bold py-2.5 rounded-2xl">UPLOAD TO CLOUDINARY</button>
+                            </div>
                         </div>
+                        <input id="modal-photo-url" type="text" class="hidden">
                     </div>
-                    <input id="modal-photo-url" type="text" class="hidden">
-                </div>
 
-                <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Name</label>
                         <input id="modal-name" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
@@ -327,15 +357,26 @@
                         <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Plan</label>
                         <input id="modal-plan" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
                     </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Email</label>
+                        <input id="modal-email" type="email" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Phone</label>
+                        <input id="modal-phone" type="tel" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
+                    </div>
                 </div>
 
+                <!-- Right column -->
                 <div>
-                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Email</label>
-                    <input id="modal-email" type="email" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Phone</label>
-                    <input id="modal-phone" type="tel" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
+                    <div class="mb-6">
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Notes (admin only)</label>
+                        <textarea id="modal-notes" rows="5" class="bg-dark border border-white/10 focus:border-primary rounded-3xl px-5 py-4 w-full outline-none resize-y"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-3">Activity Log</label>
+                        <div id="modal-activity-log" class="max-h-64 overflow-y-auto text-xs space-y-4 pr-2"></div>
+                    </div>
                 </div>
             </div>
 
@@ -372,7 +413,10 @@
                 </div>
                 <div class="pt-4">
                     <span class="text-xs uppercase tracking-widest text-gray-400 block mb-1">Assigned Membership Number</span>
-                    <div id="confirm-membership-id" class="text-5xl font-bold text-primary font-heading tracking-widest"></div>
+                    <div class="flex items-center gap-4">
+                        <div id="confirm-membership-id" class="text-5xl font-bold text-primary font-heading tracking-widest"></div>
+                        <button onclick="copyMembershipId()" class="bg-primary/10 hover:bg-primary/20 text-primary px-5 py-2 rounded-2xl text-sm font-bold">COPY ID</button>
+                    </div>
                 </div>
             </div>
             <div class="flex gap-3 mt-10">
@@ -413,6 +457,16 @@
                 <button onclick="closePaymentModal()" class="flex-1 py-4 rounded-2xl border border-white/10 hover:bg-white/5 text-sm font-bold">CANCEL</button>
                 <button onclick="recordPayment()" class="flex-1 py-4 bg-primary text-black rounded-2xl text-sm font-bold">RECORD PAYMENT</button>
             </div>
+        </div>
+    </div>
+
+    <!-- PAYMENT CONFIRMATION MODAL -->
+    <div id="payment-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
+        <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
+            <div class="text-green-400 text-6xl mb-4">✓</div>
+            <h3 class="font-heading text-2xl mb-2">Payment Recorded</h3>
+            <p id="payment-confirm-text" class="text-gray-400 mb-8"></p>
+            <button onclick="closePaymentConfirmModal()" class="w-full bg-primary text-black font-bold py-4 rounded-2xl">CLOSE</button>
         </div>
     </div>
 
@@ -523,6 +577,25 @@
             }
         }
 
+        // PLAN DURATION HELPER
+        function getPlanDuration(plan) {
+            if (!plan) return 30;
+            const p = plan.toLowerCase();
+            if (p.includes('annual') || p.includes('year')) return 365;
+            if (p.includes('quarter')) return 90;
+            if (p.includes('month')) return 30;
+            return 30; // default
+        }
+
+        // STATUS BADGE
+        function getStatusBadge(expiryDate) {
+            if (!expiryDate) return `<span class="bg-gray-500/20 text-gray-400 px-3 py-1 text-xs rounded-full">NO EXPIRY</span>`;
+            const daysLeft = Math.ceil((expiryDate - Date.now()) / 86400000);
+            if (daysLeft < 0) return `<span class="bg-red-500/20 text-red-400 px-3 py-1 text-xs rounded-full">EXPIRED</span>`;
+            if (daysLeft <= 14) return `<span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 text-xs rounded-full">EXPIRING SOON (${daysLeft}d)</span>`;
+            return `<span class="bg-green-500/20 text-green-400 px-3 py-1 text-xs rounded-full">ACTIVE</span>`;
+        }
+
         // MEMBERS FUNCTIONS
         function listenToPending() {
             db.ref('membershipRequests').on('value', (snapshot) => {
@@ -587,11 +660,20 @@
             modal.classList.remove('flex');
         }
 
+        function copyMembershipId() {
+            const id = document.getElementById('confirm-membership-id').textContent;
+            navigator.clipboard.writeText(id).then(() => {
+                alert('Membership ID copied to clipboard!');
+            });
+        }
+
         function confirmApproval() {
             if (!pendingApproveKey || !pendingApproveId) return;
             db.ref(`membershipRequests/${pendingApproveKey}`).once('value', (snap) => {
                 const req = snap.val();
                 const newMemberKey = db.ref('members').push().key;
+                const durationDays = getPlanDuration(req.plan);
+                const expiryDate = Date.now() + (durationDays * 86400000);
                 const memberData = {
                     name: req.name,
                     email: req.email,
@@ -601,16 +683,22 @@
                     memberNumber: String(pendingApproveId).padStart(4, '0'),
                     status: "member",
                     joined: Date.now(),
+                    expiryDate: expiryDate,
                     totalPaid: 0,
                     lastPayment: null,
-                    payments: []
+                    payments: [],
+                    notes: "",
+                    activityLog: [{action: "Member Approved", timestamp: Date.now(), details: `Plan: ${req.plan}`}],
+                    lastVisited: null,
+                    visitCount: 0,
+                    visits: []
                 };
                 const updates = {};
                 updates[`members/${newMemberKey}`] = memberData;
                 updates[`membershipRequests/${pendingApproveKey}`] = null;
                 db.ref().update(updates).then(() => {
                     closeApproveModal();
-                    alert(`✅ Member approved successfully!\n\nMembership ID: ${memberData.memberNumber}`);
+                    alert(`✅ Member approved!\n\nMembership ID: ${memberData.memberNumber}`);
                 });
             });
         }
@@ -623,26 +711,59 @@
 
         function listenToApprovedMembers() {
             db.ref('members').on('value', (snapshot) => {
-                const tbody = document.getElementById('approved-list');
-                tbody.innerHTML = "";
-                if (!snapshot.exists()) return;
-                const data = snapshot.val();
-                Object.keys(data).forEach(key => {
-                    const m = data[key];
-                    const row = `
-                        <tr class="border-b border-white/5 hover:bg-white/5">
-                            <td class="px-6 py-4"><img src="${m.profileImage || 'https://via.placeholder.com/60'}" class="w-10 h-10 rounded-2xl object-cover"></td>
-                            <td class="px-6 py-4 font-medium">${m.name}<br><span class="text-[10px] text-primary">#${m.memberNumber || '—'}</span></td>
-                            <td class="px-6 py-4">${m.plan}</td>
-                            <td class="px-6 py-4"><span class="bg-green-500/20 text-green-400 px-3 py-1 text-xs rounded-full">MEMBER</span></td>
-                            <td class="px-6 py-4 text-center">
-                                <button onclick="editMember('${key}')" class="text-primary hover:text-white px-4 py-2 text-sm">EDIT</button>
-                            </td>
-                        </tr>
-                    `;
-                    tbody.innerHTML += row;
-                });
+                window.allMembers = snapshot.val() || {};
+                renderApprovedMembers();
             });
+        }
+
+        function renderApprovedMembers(filtered = null) {
+            const tbody = document.getElementById('approved-list');
+            tbody.innerHTML = "";
+            const data = filtered || window.allMembers || {};
+            Object.keys(data).forEach(key => {
+                const m = data[key];
+                const expiryStr = m.expiryDate ? new Date(m.expiryDate).toLocaleDateString() : '—';
+                const statusHTML = getStatusBadge(m.expiryDate);
+                const row = `
+                    <tr class="border-b border-white/5 hover:bg-white/5">
+                        <td class="px-6 py-4"><img src="${m.profileImage || 'https://via.placeholder.com/60'}" class="w-10 h-10 rounded-2xl object-cover"></td>
+                        <td class="px-6 py-4 font-mono font-bold text-primary">#${m.memberNumber || '—'}</td>
+                        <td class="px-6 py-4 font-medium">${m.name}</td>
+                        <td class="px-6 py-4">${m.plan}</td>
+                        <td class="px-6 py-4 text-sm">${expiryStr}</td>
+                        <td class="px-6 py-4">${statusHTML}</td>
+                        <td class="px-6 py-4 text-center font-mono">${m.visitCount || 0}</td>
+                        <td class="px-6 py-4 text-center">
+                            <button onclick="editMember('${key}')" class="text-primary hover:text-white px-4 py-2 text-sm">EDIT</button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function filterMembers() {
+            const searchTerm = document.getElementById('member-search').value.toLowerCase().trim();
+            const statusFilter = document.getElementById('status-filter').value;
+            const filtered = {};
+            Object.keys(window.allMembers || {}).forEach(key => {
+                const m = window.allMembers[key];
+                const matchesSearch = !searchTerm || 
+                    (m.name || '').toLowerCase().includes(searchTerm) ||
+                    (m.memberNumber || '').includes(searchTerm) ||
+                    (m.email || '').toLowerCase().includes(searchTerm) ||
+                    (m.phone || '').includes(searchTerm);
+                
+                let matchesStatus = true;
+                if (statusFilter !== 'all') {
+                    const daysLeft = m.expiryDate ? Math.ceil((m.expiryDate - Date.now()) / 86400000) : -999;
+                    if (statusFilter === 'active' && daysLeft <= 14) matchesStatus = false;
+                    if (statusFilter === 'expiring' && (daysLeft > 14 || daysLeft < 0)) matchesStatus = false;
+                    if (statusFilter === 'expired' && daysLeft >= 0) matchesStatus = false;
+                }
+                if (matchesSearch && matchesStatus) filtered[key] = m;
+            });
+            renderApprovedMembers(filtered);
         }
 
         function editMember(key) {
@@ -655,6 +776,28 @@
                 document.getElementById('modal-plan').value = m.plan || "";
                 document.getElementById('modal-photo-url').value = m.profileImage || "";
                 document.getElementById('modal-preview').src = m.profileImage || "https://via.placeholder.com/80";
+                document.getElementById('modal-notes').value = m.notes || "";
+                
+                // Render activity log
+                const logDiv = document.getElementById('modal-activity-log');
+                logDiv.innerHTML = "";
+                if (m.activityLog && m.activityLog.length) {
+                    m.activityLog.slice().reverse().forEach(log => {
+                        const date = new Date(log.timestamp).toLocaleString();
+                        logDiv.innerHTML += `
+                            <div class="timeline-item text-xs">
+                                <div class="flex justify-between text-gray-400">
+                                    <span>${log.action}</span>
+                                    <span>${date}</span>
+                                </div>
+                                <div class="text-gray-500">${log.details || ''}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    logDiv.innerHTML = `<p class="text-gray-500 text-xs">No activity yet.</p>`;
+                }
+                
                 document.getElementById('edit-modal').classList.remove('hidden');
                 document.getElementById('edit-modal').classList.add('flex');
             });
@@ -672,13 +815,25 @@
 
         function saveMemberEdit() {
             if (!currentEditingKey) return;
+            const currentData = window.allMembers[currentEditingKey] || {};
             const updates = {
                 name: document.getElementById('modal-name').value,
                 email: document.getElementById('modal-email').value,
                 phone: document.getElementById('modal-phone').value,
                 plan: document.getElementById('modal-plan').value,
-                profileImage: document.getElementById('modal-photo-url').value || "https://via.placeholder.com/150"
+                profileImage: document.getElementById('modal-photo-url').value || "https://via.placeholder.com/150",
+                notes: document.getElementById('modal-notes').value.trim()
             };
+            
+            // Add to activity log
+            let log = currentData.activityLog || [];
+            log.push({
+                action: "Profile Updated",
+                timestamp: Date.now(),
+                details: "Admin edited member details"
+            });
+            updates.activityLog = log;
+
             db.ref(`members/${currentEditingKey}`).update(updates)
                 .then(() => {
                     alert("Member updated successfully!");
@@ -696,22 +851,44 @@
             alert("Data refreshed");
         }
 
+        // CHECK-IN
+        function logCheckIn() {
+            const id = document.getElementById('checkin-member-id').value.trim();
+            if (!id) return alert("Enter Membership ID");
+            db.ref('members').orderByChild('memberNumber').equalTo(id).once('value', (snap) => {
+                if (!snap.exists()) return alert("Member not found");
+                const memberKey = Object.keys(snap.val())[0];
+                const m = snap.val()[memberKey];
+                const now = Date.now();
+                const updates = {
+                    lastVisited: now,
+                    visitCount: (m.visitCount || 0) + 1,
+                    visits: [...(m.visits || []), now]
+                };
+                db.ref(`members/${memberKey}`).update(updates).then(() => {
+                    alert(`✅ Check-in logged for #${id}`);
+                    document.getElementById('checkin-member-id').value = "";
+                });
+            });
+        }
+
         // PAYMENTS
         function listenToPayments() {
             db.ref('members').on('value', (snapshot) => {
+                window.allMembers = snapshot.val() || {};
                 const tbody = document.getElementById('payments-list');
                 tbody.innerHTML = "";
-                if (!snapshot.exists()) return;
-                const data = snapshot.val();
-                Object.keys(data).forEach(key => {
-                    const m = data[key];
+                Object.keys(window.allMembers).forEach(key => {
+                    const m = window.allMembers[key];
                     const total = m.totalPaid ? `R${parseFloat(m.totalPaid).toFixed(2)}` : "R0.00";
                     const last = m.lastPayment ? new Date(m.lastPayment).toLocaleDateString() : "—";
+                    const expiryStr = m.expiryDate ? new Date(m.expiryDate).toLocaleDateString() : "—";
                     const row = `
                         <tr class="border-b border-white/5 hover:bg-white/5">
                             <td class="px-6 py-4 font-medium">${m.name} <span class="text-xs text-primary">(#${m.memberNumber || '—'})</span></td>
                             <td class="px-6 py-4">${m.plan}</td>
                             <td class="px-6 py-4 text-green-400">${total}</td>
+                            <td class="px-6 py-4 text-sm">${expiryStr}</td>
                             <td class="px-6 py-4 text-sm text-gray-400">${last}</td>
                             <td class="px-6 py-4 text-center">
                                 <button onclick="openPaymentModal('${m.memberNumber}')" class="text-primary hover:underline text-sm">Add Payment</button>
@@ -765,16 +942,68 @@
                     timestamp: Date.now()
                 };
 
+                const durationDays = getPlanDuration(member.plan);
+                const newExpiry = Math.max(member.expiryDate || Date.now(), Date.now() + (durationDays * 86400000));
+
                 const updates = {};
                 updates[`members/${memberKey}/payments`] = [...(member.payments || []), newPayment];
                 updates[`members/${memberKey}/totalPaid`] = (member.totalPaid || 0) + amount;
                 updates[`members/${memberKey}/lastPayment`] = Date.now();
+                updates[`members/${memberKey}/expiryDate`] = newExpiry;
+
+                // Log activity
+                let log = member.activityLog || [];
+                log.push({
+                    action: "Payment Recorded",
+                    timestamp: Date.now(),
+                    details: `R${amount} - ${note || 'Manual'}`
+                });
+                updates[`members/${memberKey}/activityLog`] = log;
 
                 db.ref().update(updates).then(() => {
                     closePaymentModal();
-                    alert(`✅ Payment of R${amount} recorded for #${memberId}`);
+                    showPaymentConfirm(member.name, amount, newExpiry);
                 });
             });
+        }
+
+        function showPaymentConfirm(name, amount, newExpiry) {
+            const expiryDate = new Date(newExpiry).toLocaleDateString();
+            document.getElementById('payment-confirm-text').innerHTML = `
+                <strong>${name}</strong><br>
+                Amount: <span class="text-green-400">R${amount}</span><br>
+                New Expiry: ${expiryDate}
+            `;
+            document.getElementById('payment-confirm-modal').classList.remove('hidden');
+            document.getElementById('payment-confirm-modal').classList.add('flex');
+        }
+
+        function closePaymentConfirmModal() {
+            const modal = document.getElementById('payment-confirm-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // CSV EXPORT
+        function exportMembersCSV() {
+            const members = Object.values(window.allMembers || {});
+            let csv = "Member#,Name,Plan,Expiry,Status,Total Paid,Visits,Joined\n";
+            members.forEach(m => {
+                const expiry = m.expiryDate ? new Date(m.expiryDate).toLocaleDateString() : '';
+                const status = m.expiryDate ? (Date.now() > m.expiryDate ? 'Expired' : (m.expiryDate - Date.now()) / 86400000 <= 14 ? 'Expiring Soon' : 'Active') : 'No Expiry';
+                csv += `"#${m.memberNumber}","${m.name}","${m.plan}","${expiry}","${status}",${m.totalPaid || 0},${m.visitCount || 0},${new Date(m.joined).toLocaleDateString()}\n`;
+            });
+            downloadCSV(csv, "fitcore_members.csv");
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
         }
 
         // START
@@ -785,6 +1014,7 @@
             listenToApprovedMembers();
             listenToPayments();
             showTab('dashboard');
+            window.allMembers = {};
         };
     </script>
 </body>
