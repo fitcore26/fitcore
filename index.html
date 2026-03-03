@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FITCORE // Admin Master</title>
+    <title>FITCORE | Admin Master</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
@@ -562,12 +562,16 @@
         });
     }
     function updateHero() {
-        db.ref('homepage/hero').update({
-            heading: document.getElementById('hero-heading').value.trim(),
-            subtext: document.getElementById('hero-subtext').value.trim(),
-            buttonText: document.getElementById('hero-button').value.trim(),
-            imageUrl: document.getElementById('hero-image-url').value.trim()
-        }).then(() => showSuccess("Hero Saved", "Changes applied successfully!"));
+    const headingValue = document.getElementById('hero-heading').value.trim();
+    const words = headingValue.split(/\s+/);
+    const lastWord = words.pop();
+    const styledHeading = words.join(' ') + (words.length > 0 ? ' ' : '') + '<span class="outline">' + lastWord + '</span>';
+    db.ref('homepage/hero').update({
+        heading: styledHeading,
+        subtext: document.getElementById('hero-subtext').value.trim(),
+        buttonText: document.getElementById('hero-button').value.trim(),
+        imageUrl: document.getElementById('hero-image-url').value.trim()
+    }).then(() => showSuccess("Hero Saved", "Changes applied successfully!"));
     }
     function updateCta() {
         db.ref('homepage/cta').update({
