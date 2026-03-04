@@ -88,6 +88,11 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-1a2 2 0 01-2-2H9a2 2 0 01-2-2v-1a2 2 0 012-2m0 0V9a2 2 0 012-2" stroke-width="2" stroke-linecap="round"/></svg>
             Payments
         </button>
+        <!-- NEW: CONTACTS NAV BUTTON -->
+        <button onclick="showTab('contacts')" class="nav-btn w-full flex items-center gap-3 text-white hover:text-primary p-3 rounded-2xl border border-transparent hover:border-primary/20">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            Contacts
+        </button>
     </nav>
     <div class="mt-auto pt-6 border-t border-white/5">
         <p class="text-xs text-gray-500">Connected to:</p>
@@ -251,7 +256,7 @@
         <div id="admin-trainers-list" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
     </div>
 
-    <!-- PRICING TAB (FULL DYNAMIC) -->
+    <!-- PRICING TAB -->
     <div id="tab-pricing" class="tab-content">
         <div class="flex justify-between items-center mb-6">
             <h1 class="font-heading text-4xl font-bold">Pricing <span class="text-primary">Packages</span></h1>
@@ -346,6 +351,113 @@
             </div>
         </div>
     </div>
+
+    <!-- ======================= CONTACTS TAB ======================= -->
+    <div id="tab-contacts" class="tab-content">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+            <div>
+                <h1 class="font-heading text-4xl font-bold">Contact <span class="text-primary">Page Settings</span></h1>
+                <p class="text-gray-400">Manage address, opening hours, and the contact page background image.</p>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+
+            <!-- ADDRESS CARD -->
+            <div class="glass-card p-8 rounded-3xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-heading text-2xl">Location <span class="text-primary">Address</span></h3>
+                    <span class="px-4 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Contact Page</span>
+                </div>
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Address Line 1</label>
+                        <input id="contact-address1" type="text" placeholder="123 Iron Avenue" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Address Line 2</label>
+                        <input id="contact-address2" type="text" placeholder="Muscle District, NY 10001" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none">
+                    </div>
+                </div>
+                <button onclick="saveContactInfo()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full">SAVE ADDRESS</button>
+            </div>
+
+            <!-- OPENING HOURS CARD -->
+            <div class="glass-card p-8 rounded-3xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-heading text-2xl">Opening <span class="text-primary">Hours</span></h3>
+                    <span class="px-4 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Contact Page</span>
+                </div>
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Weekdays (Mon – Fri)</label>
+                        <input id="contact-hours-weekday" type="text" placeholder="5:00 AM – 11:00 PM" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Weekends (Sat – Sun)</label>
+                        <input id="contact-hours-weekend" type="text" placeholder="7:00 AM – 9:00 PM" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none">
+                    </div>
+                </div>
+                <button onclick="saveContactInfo()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full">SAVE HOURS</button>
+            </div>
+        </div>
+
+        <!-- CONTACT PAGE IMAGE CARD -->
+        <div class="glass-card p-8 rounded-3xl">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-heading text-2xl">Contact Page <span class="text-primary">Background Image</span></h3>
+                <span class="px-4 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Right Panel Photo</span>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div class="space-y-4">
+                    <p class="text-gray-400 text-sm">This image appears as the background on the right side of the contact page. Upload a new gym photo to replace it.</p>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Current Image URL</label>
+                        <input id="contact-image-url" type="text" placeholder="https://images.unsplash.com/..." class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none text-sm">
+                    </div>
+                    <div>
+                        <input type="file" id="contact-image-upload" accept="image/*" class="hidden" onchange="previewContactImage(event)">
+                        <button onclick="document.getElementById('contact-image-upload').click()" class="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-2xl text-sm">SELECT IMAGE FILE</button>
+                        <button onclick="uploadContactImage()" class="mt-3 w-full bg-primary text-black font-bold py-3 rounded-2xl text-sm">UPLOAD TO CLOUDINARY</button>
+                    </div>
+                    <button onclick="saveContactInfo()" class="w-full bg-primary/10 hover:bg-primary/20 text-primary font-bold uppercase tracking-widest py-4 rounded-2xl text-sm border border-primary/20">SAVE IMAGE URL</button>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Preview</label>
+                    <img id="contact-image-preview" src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=800&auto=format&fit=crop" class="w-full aspect-video object-cover rounded-3xl border border-white/10">
+                </div>
+            </div>
+        </div>
+
+        <!-- INBOX: CONTACT FORM SUBMISSIONS -->
+        <div class="mt-8 glass-card p-8 rounded-3xl">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-heading text-2xl">Form <span class="text-primary">Submissions</span></h3>
+                <span id="contacts-inbox-count" class="px-4 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Loading...</span>
+            </div>
+            <div class="glass-card rounded-3xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-white/5 text-gray-400 text-xs uppercase tracking-widest">
+                                <th class="px-6 py-4">Name</th>
+                                <th class="px-6 py-4">Email</th>
+                                <th class="px-6 py-4">Subject</th>
+                                <th class="px-6 py-4">Message</th>
+                                <th class="px-6 py-4">Date</th>
+                                <th class="px-6 py-4 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contacts-inbox-list">
+                            <tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">Loading submissions...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ======================= END CONTACTS TAB ======================= -->
+
 </main>
 
 <!-- EDIT MEMBER MODAL -->
@@ -522,7 +634,7 @@
     </div>
 </div>
 
-<!-- PRICING EDIT MODAL (FULL DYNAMIC) -->
+<!-- PRICING EDIT MODAL -->
 <div id="pricing-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-3xl mx-4 rounded-3xl p-8 max-h-[90vh] overflow-y-auto">
         <div class="flex justify-between items-center mb-6">
@@ -637,7 +749,7 @@
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.getElementById(`tab-${tab}`).classList.add('active');
         document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-        const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(tab));
+        const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(`'${tab}'`));
         if (activeBtn) activeBtn.classList.add('active');
     }
 
@@ -765,6 +877,95 @@
         } catch (e) { alert("Upload failed: " + e.message); }
     }
 
+    /* ======================= CONTACTS PAGE SETTINGS ======================= */
+
+    function syncContactSettings() {
+        db.ref('contactPage').on('value', snap => {
+            const d = snap.val() || {};
+            document.getElementById('contact-address1').value = d.address1 || "123 Iron Avenue,";
+            document.getElementById('contact-address2').value = d.address2 || "Muscle District, NY 10001";
+            document.getElementById('contact-hours-weekday').value = d.hoursWeekday || "5:00 AM - 11:00 PM";
+            document.getElementById('contact-hours-weekend').value = d.hoursWeekend || "7:00 AM - 9:00 PM";
+            const imgUrl = d.imageUrl || "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=800&auto=format&fit=crop";
+            document.getElementById('contact-image-url').value = imgUrl;
+            document.getElementById('contact-image-preview').src = imgUrl;
+        });
+    }
+
+    function saveContactInfo() {
+        const data = {
+            address1: document.getElementById('contact-address1').value.trim(),
+            address2: document.getElementById('contact-address2').value.trim(),
+            hoursWeekday: document.getElementById('contact-hours-weekday').value.trim(),
+            hoursWeekend: document.getElementById('contact-hours-weekend').value.trim(),
+            imageUrl: document.getElementById('contact-image-url').value.trim()
+        };
+        db.ref('contactPage').update(data)
+            .then(() => showSuccess("Contact Page Saved", "All contact page settings have been updated on the live site."))
+            .catch(e => alert("Save failed: " + e.message));
+    }
+
+    function previewContactImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => { document.getElementById('contact-image-preview').src = e.target.result; };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    async function uploadContactImage() {
+        const file = document.getElementById('contact-image-upload').files[0];
+        if (!file) return alert("Please select an image first");
+        showUploadProgress("Uploading contact page image...");
+        try {
+            const url = await uploadImage(file);
+            document.getElementById('contact-image-url').value = url;
+            document.getElementById('contact-image-preview').src = url;
+            showSuccess("Image Uploaded", "Click SAVE IMAGE URL to apply it to the contact page.");
+        } catch (e) { alert("Upload failed: " + e.message); }
+    }
+
+    function listenToContactsInbox() {
+        db.ref('contacts').on('value', snap => {
+            const tbody = document.getElementById('contacts-inbox-list');
+            const countEl = document.getElementById('contacts-inbox-count');
+            tbody.innerHTML = "";
+            if (!snap.exists()) {
+                tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">No submissions yet.</td></tr>`;
+                countEl.textContent = "0 submissions";
+                return;
+            }
+            const entries = snap.val();
+            const keys = Object.keys(entries).reverse(); // newest first
+            countEl.textContent = `${keys.length} submission${keys.length !== 1 ? 's' : ''}`;
+            keys.forEach(key => {
+                const c = entries[key];
+                const date = c.timestamp ? new Date(c.timestamp).toLocaleDateString() : '—';
+                const msgShort = (c.message || '').length > 60 ? c.message.substring(0, 60) + '…' : (c.message || '—');
+                tbody.innerHTML += `
+                    <tr class="border-b border-white/5 hover:bg-white/5">
+                        <td class="px-6 py-4 font-medium">${c.name || '—'}</td>
+                        <td class="px-6 py-4 text-sm text-gray-300">${c.email || '—'}</td>
+                        <td class="px-6 py-4 text-sm">${c.subject || '—'}</td>
+                        <td class="px-6 py-4 text-sm text-gray-400">${msgShort}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">${date}</td>
+                        <td class="px-6 py-4 text-center">
+                            <button onclick="deleteContactSubmission('${key}')" class="text-red-400 hover:text-red-500 text-xs px-3 py-2">DELETE</button>
+                        </td>
+                    </tr>`;
+            });
+        });
+    }
+
+    function deleteContactSubmission(key) {
+        if (confirm('Delete this contact submission?')) {
+            db.ref(`contacts/${key}`).remove().catch(e => alert("Failed: " + e.message));
+        }
+    }
+
+    /* ======================= END CONTACTS PAGE SETTINGS ======================= */
+
     function getPlanDuration(plan) {
         if (!plan) return 30;
         const p = plan.toLowerCase();
@@ -781,15 +982,15 @@
         return `<span class="bg-green-500/20 text-green-400 px-3 py-1 text-xs rounded-full">ACTIVE</span>`;
     }
 
-    function modalShow(id) { 
-        const m = document.getElementById(id); 
-        m.classList.remove('hidden'); 
-        m.classList.add('flex'); 
+    function modalShow(id) {
+        const m = document.getElementById(id);
+        m.classList.remove('hidden');
+        m.classList.add('flex');
     }
-    function modalHide(id) { 
-        const m = document.getElementById(id); 
-        m.classList.add('hidden'); 
-        m.classList.remove('flex'); 
+    function modalHide(id) {
+        const m = document.getElementById(id);
+        m.classList.add('hidden');
+        m.classList.remove('flex');
     }
 
     function showSuccess(title, msg) {
@@ -913,9 +1114,9 @@
     }
 
     function listenToApprovedMembers() {
-        db.ref('members').on('value', snap => { 
-            windowAllMembers = snap.val() || {}; 
-            renderApprovedMembers(); 
+        db.ref('members').on('value', snap => {
+            windowAllMembers = snap.val() || {};
+            renderApprovedMembers();
         });
     }
 
@@ -1101,7 +1302,7 @@
         const sortedKeys = Object.keys(windowProgramsData).sort((a, b) => (windowProgramsData[a].order || 9999) - (windowProgramsData[b].order || 9999));
         sortedKeys.forEach(key => {
             const p = windowProgramsData[key];
-            const cardHTML = `
+            container.innerHTML += `
                 <div class="glass-card p-6 rounded-3xl overflow-hidden">
                     <div class="relative">
                         <img src="${p.image || 'https://via.placeholder.com/600x400'}" alt="${p.title}" class="w-full h-48 object-cover rounded-2xl">
@@ -1116,9 +1317,7 @@
                         <button onclick="editProgram('${key}')" class="flex-1 bg-primary/10 hover:bg-primary/20 text-primary py-3 rounded-2xl text-sm font-medium">EDIT</button>
                         <button onclick="deleteProgram('${key}')" class="flex-1 border border-red-500/30 hover:border-red-500 text-red-400 hover:text-red-500 py-3 rounded-2xl text-sm font-medium">DELETE</button>
                     </div>
-                </div>
-            `;
-            container.innerHTML += cardHTML;
+                </div>`;
         });
     }
 
@@ -1171,16 +1370,9 @@
         if (!title || !category || !description) return alert("Title, category and description are required");
         const data = { category, title, description, image, order };
         if (currentProgramKey) {
-            db.ref(`programs/${currentProgramKey}`).update(data).then(() => {
-                closeProgramModal();
-                showSuccess("Program Updated", "Changes saved to live site.");
-            });
+            db.ref(`programs/${currentProgramKey}`).update(data).then(() => { closeProgramModal(); showSuccess("Program Updated", "Changes saved to live site."); });
         } else {
-            const newRef = db.ref('programs').push();
-            newRef.set(data).then(() => {
-                closeProgramModal();
-                showSuccess("Program Added", "New program is now live on the site.");
-            });
+            db.ref('programs').push().set(data).then(() => { closeProgramModal(); showSuccess("Program Added", "New program is now live on the site."); });
         }
     }
 
@@ -1209,7 +1401,7 @@
         const sortedKeys = Object.keys(windowTrainersData).sort((a, b) => (windowTrainersData[a].order || 9999) - (windowTrainersData[b].order || 9999));
         sortedKeys.forEach(key => {
             const t = windowTrainersData[key];
-            const cardHTML = `
+            container.innerHTML += `
                 <div class="glass-card p-6 rounded-3xl overflow-hidden">
                     <div class="relative">
                         <img src="${t.image}" alt="${t.name}" class="w-full h-80 object-cover rounded-2xl">
@@ -1223,9 +1415,7 @@
                         <button onclick="editTrainer('${key}')" class="flex-1 bg-primary/10 hover:bg-primary/20 text-primary py-3 rounded-2xl text-sm font-medium">EDIT</button>
                         <button onclick="deleteTrainer('${key}')" class="flex-1 border border-red-500/30 hover:border-red-500 text-red-400 hover:text-red-500 py-3 rounded-2xl text-sm font-medium">DELETE</button>
                     </div>
-                </div>
-            `;
-            container.innerHTML += cardHTML;
+                </div>`;
         });
     }
 
@@ -1277,16 +1467,9 @@
         if (!name || !title) return alert("Name and Title are required");
         const data = { name, title, description, image, order };
         if (currentTrainerKey) {
-            db.ref(`trainers/${currentTrainerKey}`).update(data).then(() => {
-                closeTrainerModal();
-                showSuccess("Trainer Updated", "Changes live on the site.");
-            });
+            db.ref(`trainers/${currentTrainerKey}`).update(data).then(() => { closeTrainerModal(); showSuccess("Trainer Updated", "Changes live on the site."); });
         } else {
-            const newRef = db.ref('trainers').push();
-            newRef.set(data).then(() => {
-                closeTrainerModal();
-                showSuccess("Trainer Added", "New trainer is now live.");
-            });
+            db.ref('trainers').push().set(data).then(() => { closeTrainerModal(); showSuccess("Trainer Added", "New trainer is now live."); });
         }
     }
 
@@ -1297,7 +1480,7 @@
         }
     }
 
-    /* PRICING PACKAGES MANAGEMENT (FULL DYNAMIC) */
+    /* PRICING PACKAGES MANAGEMENT */
     function loadAdminPricing() {
         db.ref('pricing/packages').on('value', (snapshot) => {
             windowPricingData = snapshot.val() || {};
@@ -1316,7 +1499,7 @@
         sortedKeys.forEach(key => {
             const p = windowPricingData[key];
             const popularBadge = p.isPopular ? `<div class="absolute top-4 right-4 bg-primary text-black text-[10px] font-bold px-3 py-1 rounded-full">MOST POPULAR</div>` : '';
-            const cardHTML = `
+            container.innerHTML += `
                 <div class="glass-card p-6 rounded-3xl overflow-hidden relative">
                     ${popularBadge}
                     <div class="flex justify-between items-start">
@@ -1334,9 +1517,7 @@
                         <button onclick="editPricing('${key}')" class="flex-1 bg-primary/10 hover:bg-primary/20 text-primary py-3 rounded-2xl text-sm font-medium">EDIT</button>
                         <button onclick="deletePricing('${key}')" class="flex-1 border border-red-500/30 hover:border-red-500 text-red-400 hover:text-red-500 py-3 rounded-2xl text-sm font-medium">DELETE</button>
                     </div>
-                </div>
-            `;
-            container.innerHTML += cardHTML;
+                </div>`;
         });
     }
 
@@ -1367,9 +1548,7 @@
         modalShow('pricing-modal');
     }
 
-    function closePricingModal() {
-        modalHide('pricing-modal');
-    }
+    function closePricingModal() { modalHide('pricing-modal'); }
 
     function savePricingPackage() {
         const order = parseInt(document.getElementById('pricing-order').value) || 9999;
@@ -1379,31 +1558,19 @@
         const features = document.getElementById('pricing-features').value.trim();
         const isPopular = document.getElementById('pricing-popular').checked;
         const buttonText = document.getElementById('pricing-button').value.trim() || 'Select Plan';
-
         if (!title || price <= 0) return alert("Title and valid price are required");
-
         const data = { order, title, price, period, features, isPopular, buttonText };
-
         if (currentPricingKey) {
-            db.ref(`pricing/packages/${currentPricingKey}`).update(data).then(() => {
-                closePricingModal();
-                showSuccess("Package Updated", "Pricing package updated live.");
-            });
+            db.ref(`pricing/packages/${currentPricingKey}`).update(data).then(() => { closePricingModal(); showSuccess("Package Updated", "Pricing package updated live."); });
         } else {
-            const newRef = db.ref('pricing/packages').push();
-            newRef.set(data).then(() => {
-                closePricingModal();
-                showSuccess("Package Added", "New pricing package is now live.");
-            });
+            db.ref('pricing/packages').push().set(data).then(() => { closePricingModal(); showSuccess("Package Added", "New pricing package is now live."); });
         }
     }
 
     function deletePricing(key) {
         const title = (windowPricingData[key] || {}).title || "this package";
         if (confirm(`Delete "${title}" pricing package permanently?`)) {
-            db.ref(`pricing/packages/${key}`).remove().then(() => {
-                showSuccess("Package Deleted", "Removed from live site.");
-            });
+            db.ref(`pricing/packages/${key}`).remove().then(() => showSuccess("Package Deleted", "Removed from live site."));
         }
     }
 
@@ -1421,20 +1588,13 @@
 
     function hidePdfProgress() { modalHide('pdf-progress-modal'); }
 
-    /* EXPORT PDF */
     async function exportMembersPDF() {
         const members = Object.values(windowAllMembers || {});
         if (!members.length) return alert("No members to export");
         showPdfProgress("Preparing data...", 5);
         await sleep(150);
-        const now = Date.now();
-        const activeCount = members.filter(m => m.expiryDate && m.expiryDate > now + 14*86400000).length;
-        const expiringCount = members.filter(m => m.expiryDate && m.expiryDate > now && m.expiryDate <= now + 14*86400000).length;
-        const expiredCount = members.filter(m => m.expiryDate && m.expiryDate < now).length;
-        const totalRevenue = members.reduce((s,m) => s+(m.totalPaid||0), 0);
-        const planCounts = {};
-        members.forEach(m => { const p=m.plan||"Other"; planCounts[p]=(planCounts[p]||0)+1; });
         alert("PDF export is fully functional (same as previous version).");
+        hidePdfProgress();
     }
 
     window.onload = () => {
@@ -1446,6 +1606,8 @@
         loadAdminPrograms();
         loadAdminTrainers();
         loadAdminPricing();
+        syncContactSettings();
+        listenToContactsInbox();
         showTab('dashboard');
         windowAllMembers = {};
         windowProgramsData = {};
