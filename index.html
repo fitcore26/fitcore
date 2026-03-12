@@ -15,7 +15,7 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { primary: '#D6FF00', dark: '#0A0A0A', card: '#141414', accent: '#1F1F1F' },
+                    colors: { primary: '#C5A059', dark: '#0A0A0A', card: '#141414', accent: '#1F1F1F' },
                     fontFamily: { heading: ['Oswald', 'sans-serif'], body: ['Poppins', 'sans-serif'] }
                 }
             }
@@ -26,30 +26,30 @@
         .font-heading { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0A0A0A; }
-        ::-webkit-scrollbar-thumb { background: #D6FF00; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #C5A059; border-radius: 10px; }
         .glass-card {
             background: rgba(20, 20, 20, 0.8);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(214, 255, 0, 0.1);
+            border: 1px solid rgba(197, 160, 89, 0.1);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glass-card:hover {
             transform: translateY(-6px) scale(1.02);
             box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
-            border-color: rgba(214, 255, 0, 0.3);
+            border-color: rgba(197, 160, 89, 0.3);
         }
         .nav-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .nav-btn:hover { transform: translateX(8px); background-color: rgba(214, 255, 0, 0.15) !important; }
-        .nav-btn.active { background-color: rgba(214, 255, 0, 0.15); border-color: #D6FF00; color: #D6FF00; }
+        .nav-btn:hover { transform: translateX(8px); background-color: rgba(197, 160, 89, 0.15) !important; }
+        .nav-btn.active { background-color: rgba(197, 160, 89, 0.15); border-color: #C5A059; color: #C5A059; }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.4s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .modal { animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
         @keyframes modalPop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
         .timeline-item { position: relative; padding-left: 24px; }
-        .timeline-item::before { content: ''; position: absolute; left: 8px; top: 6px; bottom: -20px; width: 2px; background: rgba(214,255,0,0.2); }
+        .timeline-item::before { content: ''; position: absolute; left: 8px; top: 6px; bottom: -20px; width: 2px; background: rgba(197,160,89,0.2); }
         .timeline-item:last-child::before { display: none; }
-        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #D6FF00, #aacc00); border-radius: 999px; transition: width 0.3s ease; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #C5A059, #a38a4a); border-radius: 999px; transition: width 0.3s ease; }
         @keyframes progressPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
         .progress-pulse { animation: progressPulse 1.5s ease-in-out infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -91,6 +91,11 @@
         <button onclick="showTab('contacts')" class="nav-btn w-full flex items-center gap-3 text-white hover:text-primary p-3 rounded-2xl border border-transparent hover:border-primary/20">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             Contacts
+        </button>
+        <!-- NEW: BRANDING / HEADER & FOOTER TAB -->
+        <button onclick="showTab('branding')" class="nav-btn w-full flex items-center gap-3 text-white hover:text-primary p-3 rounded-2xl border border-transparent hover:border-primary/20">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2 2 2 0 01-2-2 2 2 0 012-2 2 2 0 01-2-2 2 2 0 012-2 2 2 0 01-2-2 2 2 0 012-2zM17 21a4 4 0 004-4V5a2 2 0 01-2-2 2 2 0 01-2-2 2 2 0 01-2-2 2 2 0 01-2-2 2 2 0 01-2-2 2 2 0 01-2-2z"/></svg>
+            Branding
         </button>
     </nav>
     <div class="mt-auto pt-6 border-t border-white/5">
@@ -442,12 +447,63 @@
             </div>
         </div>
     </div>
-    <!-- ======================= END CONTACTS TAB ======================= -->
+    <!-- ======================= BRANDING / HEADER & FOOTER TAB ======================= -->
+    <div id="tab-branding" class="tab-content">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+            <div>
+                <h1 class="font-heading text-4xl font-bold">Branding <span class="text-primary">Header &amp; Footer</span></h1>
+                <p class="text-gray-400">Update navbar logo and footer content live on the public site.</p>
+            </div>
+        </header>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- NAVBAR SECTION -->
+            <div class="glass-card p-8 rounded-3xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-heading text-2xl">Navbar <span class="text-primary">Logo</span></h3>
+                    <span class="px-4 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Top Navigation</span>
+                </div>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Logo Image URL</label>
+                        <input id="nav-logo-url" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none text-sm">
+                    </div>
+                    <div>
+                        <input type="file" id="nav-logo-upload" accept="image/*" class="hidden" onchange="previewNavLogo(event)">
+                        <button onclick="document.getElementById('nav-logo-upload').click()" class="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-2xl text-sm">SELECT LOGO FILE</button>
+                        <button onclick="uploadNavLogo()" class="mt-3 w-full bg-primary text-black font-bold py-3 rounded-2xl text-sm">UPLOAD TO CLOUDINARY</button>
+                    </div>
+                </div>
+                <button onclick="saveBranding()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full">SAVE NAVBAR LOGO</button>
+            </div>
+            <!-- FOOTER SECTION -->
+            <div class="glass-card p-8 rounded-3xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-heading text-2xl">Footer <span class="text-primary">Content</span></h3>
+                    <span class="px-4 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Bottom Section</span>
+                </div>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Footer Description</label>
+                        <textarea id="footer-description" rows="3" class="bg-dark border border-white/10 focus:border-primary rounded-3xl px-5 py-4 w-full outline-none resize-y"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Footer Email</label>
+                        <input id="footer-email" type="email" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Copyright Text</label>
+                        <input id="footer-copyright" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none">
+                    </div>
+                </div>
+                <button onclick="saveBranding()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full">SAVE FOOTER</button>
+            </div>
+        </div>
+    </div>
 </main>
 <!-- EDIT MEMBER MODAL -->
 <div id="edit-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-2xl mx-4 rounded-3xl p-8 max-h-[90vh] overflow-y-auto">
-        <h3 class="font-heading text-2xl mb-6">Edit Member</h3>
+        <h3 class="font-heading text-2xl mb-6 text-white">Edit Member</h3>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div class="space-y-6">
                 <div>
@@ -661,7 +717,7 @@
     <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
         <div class="relative w-20 h-20 mx-auto mb-5">
             <svg class="absolute inset-0 w-20 h-20 text-white/10" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="34" stroke="currentColor" stroke-width="5"/></svg>
-            <svg class="spin absolute inset-0 w-20 h-20" viewBox="0 0 80 80" fill="none" style="animation-duration:0.9s;"><circle cx="40" cy="40" r="34" stroke="#D6FF00" stroke-width="5" stroke-dasharray="60 154" stroke-linecap="round"/></svg>
+            <svg class="spin absolute inset-0 w-20 h-20" viewBox="0 0 80 80" fill="none" style="animation-duration:0.9s;"><circle cx="40" cy="40" r="34" stroke="#C5A059" stroke-width="5" stroke-dasharray="60 154" stroke-linecap="round"/></svg>
             <div class="absolute inset-0 flex items-center justify-center"><svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg></div>
         </div>
         <h3 class="font-heading text-xl mb-1">Uploading Image</h3>
@@ -675,7 +731,7 @@
     <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
         <div class="relative w-20 h-20 mx-auto mb-5">
             <svg class="absolute inset-0 w-20 h-20 text-white/10" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="34" stroke="currentColor" stroke-width="5"/></svg>
-            <svg class="spin absolute inset-0 w-20 h-20" viewBox="0 0 80 80" fill="none" style="animation-duration:1.1s;"><circle cx="40" cy="40" r="34" stroke="#D6FF00" stroke-width="5" stroke-dasharray="90 124" stroke-linecap="round"/></svg>
+            <svg class="spin absolute inset-0 w-20 h-20" viewBox="0 0 80 80" fill="none" style="animation-duration:1.1s;"><circle cx="40" cy="40" r="34" stroke="#C5A059" stroke-width="5" stroke-dasharray="90 124" stroke-linecap="round"/></svg>
             <div class="absolute inset-0 flex items-center justify-center"><svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
         </div>
         <h3 class="font-heading text-xl mb-1">Generating Report</h3>
@@ -711,14 +767,12 @@
     let windowTrainersData = {};
     let windowPricingData = {};
     let windowAllMembers = {};
-
     /* ======================= STRIP HTML HELPER (FIX FOR HERO HEADING) ======================= */
     function stripHtml(html) {
         const div = document.createElement("div");
         div.innerHTML = html || "";
         return div.textContent || div.innerText || "";
     }
-
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     function showTab(tab) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -742,7 +796,6 @@
     function syncHomepage() {
         db.ref('homepage/hero').on('value', snap => {
             const d = snap.val() || {};
-            // FIXED: Use stripHtml so admin input shows clean text only (no visible <span> code)
             document.getElementById('hero-heading').value = stripHtml(d.heading || "");
             document.getElementById('hero-subtext').value = d.subtext || "";
             document.getElementById('hero-button').value = d.buttonText || "";
@@ -768,7 +821,7 @@
         const headingValue = document.getElementById('hero-heading').value.trim();
         const words = headingValue.split(/\s+/);
         const lastWord = words.pop();
-        const styledHeading = words.join(' ') + (words.length > 0 ? ' ' : '') + '<span style="color: #D6FF00;">' + lastWord + '</span>';
+        const styledHeading = words.join(' ') + (words.length > 0 ? ' ' : '') + '<span style="color: #C5A059;">' + lastWord + '</span>';
         db.ref('homepage/hero').update({
             heading: styledHeading,
             subtext: document.getElementById('hero-subtext').value.trim(),
@@ -920,7 +973,48 @@
             db.ref(`contacts/${key}`).remove().catch(e => alert("Failed: " + e.message));
         }
     }
-    /* ======================= END CONTACTS PAGE SETTINGS ======================= */
+    /* ======================= BRANDING / HEADER & FOOTER ======================= */
+    function syncBranding() {
+        db.ref('branding').on('value', snap => {
+            const d = snap.val() || {};
+            document.getElementById('nav-logo-url').value = d.navLogo || "https://i.postimg.cc/P5m6Yp62/IMG-20260312-101643.png";
+            document.getElementById('footer-description').value = d.footerDesc || "The premier destination for fitness excellence. We combine professional methodology with an elite community environment.";
+            document.getElementById('footer-email').value = d.footerEmail || "contact@rmfitness.co.za";
+            document.getElementById('footer-copyright').value = d.footerCopyright || "© 2026 Robert Mphephu Fitness Centre. Built for Greatness.";
+        });
+    }
+    function saveBranding() {
+        const data = {
+            navLogo: document.getElementById('nav-logo-url').value.trim(),
+            footerDesc: document.getElementById('footer-description').value.trim(),
+            footerEmail: document.getElementById('footer-email').value.trim(),
+            footerCopyright: document.getElementById('footer-copyright').value.trim()
+        };
+        db.ref('branding').update(data)
+            .then(() => showSuccess("Branding Saved", "Navbar & Footer updated on the live site."))
+            .catch(e => alert("Save failed: " + e.message));
+    }
+    function previewNavLogo(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                // Preview not shown in this tab, but URL will be set after upload
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    async function uploadNavLogo() {
+        const file = document.getElementById('nav-logo-upload').files[0];
+        if (!file) return alert("Please select an image first");
+        showUploadProgress("Uploading navbar logo...");
+        try {
+            const url = await uploadImage(file);
+            document.getElementById('nav-logo-url').value = url;
+            showSuccess("Navbar Logo Uploaded", "Click SAVE NAVBAR LOGO to apply.");
+        } catch (e) { alert("Upload failed: " + e.message); }
+    }
+    /* ======================= END BRANDING ======================= */
     function getPlanDuration(plan) {
         if (!plan) return 30;
         const p = plan.toLowerCase();
@@ -1509,6 +1603,7 @@
         loadAdminPricing();
         syncContactSettings();
         listenToContactsInbox();
+        syncBranding();
         showTab('dashboard');
         windowAllMembers = {};
         windowProgramsData = {};
