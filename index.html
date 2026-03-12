@@ -57,7 +57,6 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col md:flex-row overflow-hidden">
-
 <!-- SIDEBAR -->
 <aside class="w-full md:w-64 bg-card border-r border-white/5 p-6 flex flex-col md:sticky md:top-0 md:h-screen overflow-y-auto flex-shrink-0">
     <div class="font-heading text-2xl font-bold tracking-wider text-white mb-10">
@@ -99,10 +98,8 @@
         <p class="text-[10px] text-primary truncate">pinotp-d7ef5.firebaseapp.com</p>
     </div>
 </aside>
-
 <!-- MAIN -->
 <main class="flex-1 p-6 md:p-12 overflow-y-auto h-screen">
-
     <!-- DASHBOARD TAB -->
     <div id="tab-dashboard" class="tab-content active">
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
@@ -231,7 +228,6 @@
             </div>
         </section>
     </div>
-
     <!-- PROGRAMS TAB -->
     <div id="tab-programs" class="tab-content">
         <div class="flex justify-between items-center mb-6">
@@ -243,7 +239,6 @@
         </div>
         <div id="admin-programs-list" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
     </div>
-
     <!-- TRAINERS TAB -->
     <div id="tab-trainers" class="tab-content">
         <div class="flex justify-between items-center mb-6">
@@ -255,7 +250,6 @@
         </div>
         <div id="admin-trainers-list" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
     </div>
-
     <!-- PRICING TAB -->
     <div id="tab-pricing" class="tab-content">
         <div class="flex justify-between items-center mb-6">
@@ -267,7 +261,6 @@
         </div>
         <div id="admin-pricing-list" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
     </div>
-
     <!-- MEMBERS TAB -->
     <div id="tab-members" class="tab-content">
         <div class="flex justify-between items-center mb-6">
@@ -328,7 +321,6 @@
             </div>
         </div>
     </div>
-
     <!-- PAYMENTS TAB -->
     <div id="tab-payments" class="tab-content">
         <div class="flex justify-between items-center mb-8">
@@ -351,7 +343,6 @@
             </div>
         </div>
     </div>
-
     <!-- ======================= CONTACTS TAB ======================= -->
     <div id="tab-contacts" class="tab-content">
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
@@ -360,9 +351,7 @@
                 <p class="text-gray-400">Manage address, opening hours, and the contact page background image.</p>
             </div>
         </header>
-
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-
             <!-- ADDRESS CARD -->
             <div class="glass-card p-8 rounded-3xl">
                 <div class="flex items-center justify-between mb-6">
@@ -381,7 +370,6 @@
                 </div>
                 <button onclick="saveContactInfo()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full">SAVE ADDRESS</button>
             </div>
-
             <!-- OPENING HOURS CARD -->
             <div class="glass-card p-8 rounded-3xl">
                 <div class="flex items-center justify-between mb-6">
@@ -401,7 +389,6 @@
                 <button onclick="saveContactInfo()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full">SAVE HOURS</button>
             </div>
         </div>
-
         <!-- CONTACT PAGE IMAGE CARD -->
         <div class="glass-card p-8 rounded-3xl">
             <div class="flex items-center justify-between mb-6">
@@ -428,7 +415,6 @@
                 </div>
             </div>
         </div>
-
         <!-- INBOX: CONTACT FORM SUBMISSIONS -->
         <div class="mt-8 glass-card p-8 rounded-3xl">
             <div class="flex items-center justify-between mb-6">
@@ -457,9 +443,7 @@
         </div>
     </div>
     <!-- ======================= END CONTACTS TAB ======================= -->
-
 </main>
-
 <!-- EDIT MEMBER MODAL -->
 <div id="edit-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-2xl mx-4 rounded-3xl p-8 max-h-[90vh] overflow-y-auto">
@@ -498,7 +482,6 @@
         </div>
     </div>
 </div>
-
 <!-- APPROVAL CONFIRMATION MODAL -->
 <div id="approve-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
@@ -516,7 +499,6 @@
         </div>
     </div>
 </div>
-
 <!-- DELETE CONFIRMATION MODAL -->
 <div id="delete-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
@@ -525,7 +507,6 @@
         <div class="flex gap-3"><button onclick="closeDeleteModal()" class="flex-1 py-4 rounded-2xl border border-white/10 hover:bg-white/5 text-sm font-bold">CANCEL</button><button onclick="confirmDeleteMember()" class="flex-1 py-4 bg-red-500 hover:bg-red-600 text-white rounded-2xl text-sm font-bold">DELETE MEMBER</button></div>
     </div>
 </div>
-
 <!-- RECORD PAYMENT MODAL -->
 <div id="payment-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-md mx-4 rounded-3xl p-8">
@@ -542,7 +523,6 @@
         </div>
     </div>
 </div>
-
 <!-- PAYMENT CONFIRMATION MODAL -->
 <div id="payment-confirm-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
@@ -552,7 +532,6 @@
         <button onclick="closePaymentConfirmModal()" class="w-full bg-primary text-black font-bold py-4 rounded-2xl">CLOSE</button>
     </div>
 </div>
-
 <!-- SUCCESS MODAL -->
 <div id="success-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
@@ -562,7 +541,6 @@
         <button onclick="closeSuccessModal()" class="w-full bg-primary text-black font-bold py-4 rounded-2xl">CLOSE</button>
     </div>
 </div>
-
 <!-- PROGRAM EDIT MODAL -->
 <div id="program-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-3xl mx-4 rounded-3xl p-8 max-h-[90vh] overflow-y-auto">
@@ -597,7 +575,6 @@
         </div>
     </div>
 </div>
-
 <!-- TRAINER EDIT MODAL -->
 <div id="trainer-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-3xl mx-4 rounded-3xl p-8 max-h-[90vh] overflow-y-auto">
@@ -633,7 +610,6 @@
         </div>
     </div>
 </div>
-
 <!-- PRICING EDIT MODAL -->
 <div id="pricing-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-3xl mx-4 rounded-3xl p-8 max-h-[90vh] overflow-y-auto">
@@ -667,7 +643,6 @@
         </div>
     </div>
 </div>
-
 <!-- REFRESH MODAL -->
 <div id="refresh-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
@@ -681,7 +656,6 @@
         <button onclick="closeRefreshModal()" class="w-full bg-primary text-black font-bold py-4 rounded-2xl hover:scale-105 transition-transform">DONE</button>
     </div>
 </div>
-
 <!-- UPLOAD PROGRESS MODAL -->
 <div id="upload-progress-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
@@ -696,7 +670,6 @@
         <p id="upload-progress-pct" class="text-primary font-mono text-sm font-bold">0%</p>
     </div>
 </div>
-
 <!-- PDF PROGRESS MODAL -->
 <div id="pdf-progress-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-sm mx-4 rounded-3xl p-8 text-center">
@@ -711,10 +684,8 @@
         <p id="pdf-progress-pct" class="text-primary font-mono text-sm font-bold">0%</p>
     </div>
 </div>
-
 <!-- Off-screen PDF render target -->
 <div id="pdf-temp" style="position:fixed;left:-9999px;top:0;width:794px;background:#0A0A0A;z-index:-1;"></div>
-
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyAxBT0oESoL62oz_x_Z8cMtdENWZPx4tMI",
@@ -729,7 +700,6 @@
     const UPLOAD_PRESET = "admin_tlaka";
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
     let currentEditingKey = null;
     let currentProgramKey = null;
     let currentTrainerKey = null;
@@ -737,14 +707,19 @@
     let pendingApproveKey = null;
     let pendingApproveId = null;
     let pendingDeleteKey = null;
-
     let windowProgramsData = {};
     let windowTrainersData = {};
     let windowPricingData = {};
     let windowAllMembers = {};
 
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    /* ======================= STRIP HTML HELPER (FIX FOR HERO HEADING) ======================= */
+    function stripHtml(html) {
+        const div = document.createElement("div");
+        div.innerHTML = html || "";
+        return div.textContent || div.innerText || "";
+    }
 
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
     function showTab(tab) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.getElementById(`tab-${tab}`).classList.add('active');
@@ -752,7 +727,6 @@
         const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(`'${tab}'`));
         if (activeBtn) activeBtn.classList.add('active');
     }
-
     function syncStats() {
         db.ref('stats').on('value', snap => {
             const d = snap.val() || {};
@@ -761,16 +735,15 @@
             document.getElementById('edit-programs').value = d.programs || "30+";
         });
     }
-
     function updateStat(key) {
         const val = document.getElementById(`edit-${key}`).value;
         db.ref(`stats/${key}`).set(val).then(() => alert(`${key} updated!`)).catch(console.error);
     }
-
     function syncHomepage() {
         db.ref('homepage/hero').on('value', snap => {
             const d = snap.val() || {};
-            document.getElementById('hero-heading').value = d.heading || "";
+            // FIXED: Use stripHtml so admin input shows clean text only (no visible <span> code)
+            document.getElementById('hero-heading').value = stripHtml(d.heading || "");
             document.getElementById('hero-subtext').value = d.subtext || "";
             document.getElementById('hero-button').value = d.buttonText || "";
             document.getElementById('hero-image-url').value = d.imageUrl || "";
@@ -791,7 +764,6 @@
             }
         });
     }
-
     function updateHero() {
         const headingValue = document.getElementById('hero-heading').value.trim();
         const words = headingValue.split(/\s+/);
@@ -804,7 +776,6 @@
             imageUrl: document.getElementById('hero-image-url').value.trim()
         }).then(() => showSuccess("Hero Saved", "Changes applied successfully!"));
     }
-
     function updateCta() {
         db.ref('homepage/cta').update({
             heading: document.getElementById('cta-heading').value.trim(),
@@ -813,27 +784,22 @@
             imageUrl: document.getElementById('cta-image-url').value.trim()
         }).then(() => showSuccess("CTA Saved", "Changes applied successfully!"));
     }
-
     function updateService(n) {
         db.ref(`homepage/services/${n}`).update({
             title: document.getElementById(`service${n}-title`).value.trim(),
             description: document.getElementById(`service${n}-desc`).value.trim()
         }).then(() => showSuccess(`Card ${n} Saved`, "Service card updated!"));
     }
-
     function showUploadProgress(label) {
         document.getElementById('upload-progress-label').textContent = label || "Sending to Cloudinary...";
         setUploadPct(0);
         modalShow('upload-progress-modal');
     }
-
     function setUploadPct(p) {
         document.getElementById('upload-progress-bar').style.width = p + '%';
         document.getElementById('upload-progress-pct').textContent = Math.round(p) + '%';
     }
-
     function hideUploadProgress() { modalHide('upload-progress-modal'); }
-
     function uploadImage(file) {
         return new Promise((resolve, reject) => {
             const fd = new FormData();
@@ -854,7 +820,6 @@
             xhr.send(fd);
         });
     }
-
     async function uploadHeroImage() {
         const file = document.getElementById('hero-image-upload').files[0];
         if (!file) return alert("Please select an image first");
@@ -865,7 +830,6 @@
             showSuccess("Hero Image Uploaded", "URL saved. Click SAVE HERO SECTION to apply.");
         } catch (e) { alert("Upload failed: " + e.message); }
     }
-
     async function uploadCtaImage() {
         const file = document.getElementById('cta-image-upload').files[0];
         if (!file) return alert("Please select an image first");
@@ -876,9 +840,7 @@
             showSuccess("CTA Image Uploaded", "URL saved. Click SAVE CTA SECTION to apply.");
         } catch (e) { alert("Upload failed: " + e.message); }
     }
-
     /* ======================= CONTACTS PAGE SETTINGS ======================= */
-
     function syncContactSettings() {
         db.ref('contactPage').on('value', snap => {
             const d = snap.val() || {};
@@ -891,7 +853,6 @@
             document.getElementById('contact-image-preview').src = imgUrl;
         });
     }
-
     function saveContactInfo() {
         const data = {
             address1: document.getElementById('contact-address1').value.trim(),
@@ -904,7 +865,6 @@
             .then(() => showSuccess("Contact Page Saved", "All contact page settings have been updated on the live site."))
             .catch(e => alert("Save failed: " + e.message));
     }
-
     function previewContactImage(event) {
         const file = event.target.files[0];
         if (file) {
@@ -913,7 +873,6 @@
             reader.readAsDataURL(file);
         }
     }
-
     async function uploadContactImage() {
         const file = document.getElementById('contact-image-upload').files[0];
         if (!file) return alert("Please select an image first");
@@ -925,7 +884,6 @@
             showSuccess("Image Uploaded", "Click SAVE IMAGE URL to apply it to the contact page.");
         } catch (e) { alert("Upload failed: " + e.message); }
     }
-
     function listenToContactsInbox() {
         db.ref('contacts').on('value', snap => {
             const tbody = document.getElementById('contacts-inbox-list');
@@ -957,15 +915,12 @@
             });
         });
     }
-
     function deleteContactSubmission(key) {
         if (confirm('Delete this contact submission?')) {
             db.ref(`contacts/${key}`).remove().catch(e => alert("Failed: " + e.message));
         }
     }
-
     /* ======================= END CONTACTS PAGE SETTINGS ======================= */
-
     function getPlanDuration(plan) {
         if (!plan) return 30;
         const p = plan.toLowerCase();
@@ -973,7 +928,6 @@
         if (p.includes('quarter')) return 90;
         return 30;
     }
-
     function getStatusBadge(exp) {
         if (!exp) return `<span class="bg-gray-500/20 text-gray-400 px-3 py-1 text-xs rounded-full">NO EXPIRY</span>`;
         const d = Math.ceil((exp - Date.now()) / 86400000);
@@ -981,7 +935,6 @@
         if (d <= 14) return `<span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 text-xs rounded-full">EXPIRING SOON (${d}d)</span>`;
         return `<span class="bg-green-500/20 text-green-400 px-3 py-1 text-xs rounded-full">ACTIVE</span>`;
     }
-
     function modalShow(id) {
         const m = document.getElementById(id);
         m.classList.remove('hidden');
@@ -992,14 +945,12 @@
         m.classList.add('hidden');
         m.classList.remove('flex');
     }
-
     function showSuccess(title, msg) {
         document.getElementById('success-title').textContent = title;
         document.getElementById('success-text').innerHTML = msg;
         modalShow('success-modal');
     }
     function closeSuccessModal() { modalHide('success-modal'); }
-
     function refreshMembers() {
         db.ref('members').once('value', snap => {
             windowAllMembers = snap.val() || {};
@@ -1012,7 +963,6 @@
         });
     }
     function closeRefreshModal() { modalHide('refresh-modal'); }
-
     function listenToPending() {
         db.ref('membershipRequests').on('value', snap => {
             const tbody = document.getElementById('pending-list');
@@ -1034,13 +984,11 @@
             });
         });
     }
-
     function getNextMembershipId(cb) {
         db.ref('counter/membershipNext').transaction(c => (c || 1000) + 1, (err, committed, snap) => {
             cb(err ? null : snap.val());
         });
     }
-
     function openApproveModal(requestKey) {
         pendingApproveKey = requestKey;
         db.ref(`membershipRequests/${requestKey}`).once('value', snap => {
@@ -1057,10 +1005,8 @@
             });
         });
     }
-
     function closeApproveModal() { modalHide('approve-confirm-modal'); }
     function copyMembershipId() { navigator.clipboard.writeText(document.getElementById('confirm-membership-id').textContent); alert('Membership ID copied!'); }
-
     function confirmApproval() {
         if (!pendingApproveKey || !pendingApproveId) return;
         db.ref(`membershipRequests/${pendingApproveKey}`).once('value', snap => {
@@ -1085,9 +1031,7 @@
             });
         });
     }
-
     function deleteRequest(id) { if (confirm('Delete this application?')) db.ref(`membershipRequests/${id}`).remove(); }
-
     function deleteApprovedMember(key) {
         pendingDeleteKey = key;
         db.ref(`members/${key}`).once('value', snap => {
@@ -1096,12 +1040,10 @@
             modalShow('delete-confirm-modal');
         });
     }
-
     function closeDeleteModal() {
         modalHide('delete-confirm-modal');
         pendingDeleteKey = null;
     }
-
     function confirmDeleteMember() {
         if (!pendingDeleteKey) return;
         db.ref(`members/${pendingDeleteKey}`).remove().then(() => {
@@ -1112,14 +1054,12 @@
             alert("Failed to delete: " + e.message);
         });
     }
-
     function listenToApprovedMembers() {
         db.ref('members').on('value', snap => {
             windowAllMembers = snap.val() || {};
             renderApprovedMembers();
         });
     }
-
     function renderApprovedMembers(filtered) {
         const tbody = document.getElementById('approved-list');
         tbody.innerHTML = "";
@@ -1142,7 +1082,6 @@
                 </tr>`;
         });
     }
-
     function filterMembers() {
         const q = document.getElementById('member-search').value.toLowerCase().trim();
         const sf = document.getElementById('status-filter').value;
@@ -1161,7 +1100,6 @@
         });
         renderApprovedMembers(filtered);
     }
-
     function editMember(key) {
         currentEditingKey = key;
         db.ref(`members/${key}`).once('value', snap => {
@@ -1181,7 +1119,6 @@
             modalShow('edit-modal');
         });
     }
-
     async function uploadMemberPhoto() {
         const f = document.getElementById('modal-photo-upload').files[0];
         if (!f) return alert("Choose a file first");
@@ -1192,7 +1129,6 @@
             document.getElementById('modal-preview').src = url;
         } catch(e) { alert("Upload failed: " + e.message); }
     }
-
     function saveMemberEdit() {
         if (!currentEditingKey) return;
         const cur = windowAllMembers[currentEditingKey] || {};
@@ -1209,9 +1145,7 @@
         updates.activityLog = log;
         db.ref(`members/${currentEditingKey}`).update(updates).then(() => { showSuccess("Member Updated","All changes saved!"); closeModal(); });
     }
-
     function closeModal() { modalHide('edit-modal'); }
-
     function logCheckIn() {
         const id = document.getElementById('checkin-member-id').value.trim();
         if (!id) return alert("Enter Membership ID");
@@ -1224,7 +1158,6 @@
                 .then(() => { showSuccess("Check-in Logged",`Visit recorded for #${id}`); document.getElementById('checkin-member-id').value=""; });
         });
     }
-
     function listenToPayments() {
         db.ref('members').on('value', snap => {
             windowAllMembers = snap.val() || {};
@@ -1244,7 +1177,6 @@
             });
         });
     }
-
     function openPaymentModal(preFillId="") {
         document.getElementById('payment-member-id').value = preFillId;
         document.getElementById('payment-date').value = new Date().toISOString().split('T')[0];
@@ -1252,9 +1184,7 @@
         document.getElementById('payment-note').value = "";
         modalShow('payment-modal');
     }
-
     function closePaymentModal() { modalHide('payment-modal'); }
-
     function recordPayment() {
         const memberId = document.getElementById('payment-member-id').value.trim();
         const amount = parseFloat(document.getElementById('payment-amount').value);
@@ -1281,9 +1211,7 @@
             });
         });
     }
-
     function closePaymentConfirmModal() { modalHide('payment-confirm-modal'); }
-
     /* PROGRAMS MANAGEMENT */
     function loadAdminPrograms() {
         db.ref('programs').on('value', (snapshot) => {
@@ -1291,7 +1219,6 @@
             renderAdminPrograms();
         });
     }
-
     function renderAdminPrograms() {
         const container = document.getElementById('admin-programs-list');
         container.innerHTML = '';
@@ -1320,7 +1247,6 @@
                 </div>`;
         });
     }
-
     function addNewProgram() {
         currentProgramKey = null;
         document.getElementById('program-modal-title').textContent = 'Add New Program';
@@ -1332,7 +1258,6 @@
         document.getElementById('prog-preview').src = 'https://via.placeholder.com/600x400/141414/555555?text=PROGRAM+IMAGE';
         modalShow('program-modal');
     }
-
     function editProgram(key) {
         currentProgramKey = key;
         const p = windowProgramsData[key] || {};
@@ -1346,9 +1271,7 @@
         document.getElementById('prog-preview').src = imgUrl;
         modalShow('program-modal');
     }
-
     function closeProgramModal() { modalHide('program-modal'); }
-
     async function uploadProgramImage() {
         const f = document.getElementById('prog-image-upload').files[0];
         if (!f) return alert("Choose a file first");
@@ -1359,7 +1282,6 @@
             document.getElementById('prog-preview').src = url;
         } catch(e) { alert("Upload failed: " + e.message); }
     }
-
     function saveProgram() {
         const order = parseInt(document.getElementById('prog-order').value) || 9999;
         const category = document.getElementById('prog-category').value.trim();
@@ -1375,14 +1297,12 @@
             db.ref('programs').push().set(data).then(() => { closeProgramModal(); showSuccess("Program Added", "New program is now live on the site."); });
         }
     }
-
     function deleteProgram(key) {
         const title = (windowProgramsData[key] || {}).title || "this program";
         if (confirm(`Delete "${title}" permanently?`)) {
             db.ref(`programs/${key}`).remove().then(() => showSuccess("Program Deleted", "Removed from live site."));
         }
     }
-
     /* TRAINERS MANAGEMENT */
     function loadAdminTrainers() {
         db.ref('trainers').on('value', (snapshot) => {
@@ -1390,7 +1310,6 @@
             renderAdminTrainers();
         });
     }
-
     function renderAdminTrainers() {
         const container = document.getElementById('admin-trainers-list');
         container.innerHTML = '';
@@ -1418,7 +1337,6 @@
                 </div>`;
         });
     }
-
     function addNewTrainer() {
         currentTrainerKey = null;
         document.getElementById('trainer-modal-title').textContent = 'Add New Trainer';
@@ -1430,7 +1348,6 @@
         document.getElementById('trainer-preview').src = 'https://via.placeholder.com/600x800/141414/555555?text=TRAINER+PHOTO';
         modalShow('trainer-modal');
     }
-
     function editTrainer(key) {
         currentTrainerKey = key;
         const t = windowTrainersData[key] || {};
@@ -1443,9 +1360,7 @@
         document.getElementById('trainer-preview').src = t.image || 'https://via.placeholder.com/600x800/141414/555555?text=TRAINER+PHOTO';
         modalShow('trainer-modal');
     }
-
     function closeTrainerModal() { modalHide('trainer-modal'); }
-
     async function uploadTrainerImage() {
         const f = document.getElementById('trainer-image-upload').files[0];
         if (!f) return alert("Choose a file first");
@@ -1456,7 +1371,6 @@
             document.getElementById('trainer-preview').src = url;
         } catch(e) { alert("Upload failed: " + e.message); }
     }
-
     function saveTrainer() {
         const order = parseInt(document.getElementById('trainer-order').value) || 9999;
         const name = document.getElementById('trainer-name').value.trim();
@@ -1472,14 +1386,12 @@
             db.ref('trainers').push().set(data).then(() => { closeTrainerModal(); showSuccess("Trainer Added", "New trainer is now live."); });
         }
     }
-
     function deleteTrainer(key) {
         const name = (windowTrainersData[key] || {}).name || "this trainer";
         if (confirm(`Delete "${name}" permanently?`)) {
             db.ref(`trainers/${key}`).remove().then(() => showSuccess("Trainer Deleted", "Removed from live site."));
         }
     }
-
     /* PRICING PACKAGES MANAGEMENT */
     function loadAdminPricing() {
         db.ref('pricing/packages').on('value', (snapshot) => {
@@ -1487,7 +1399,6 @@
             renderAdminPricing();
         });
     }
-
     function renderAdminPricing() {
         const container = document.getElementById('admin-pricing-list');
         container.innerHTML = '';
@@ -1520,7 +1431,6 @@
                 </div>`;
         });
     }
-
     function addNewPricing() {
         currentPricingKey = null;
         document.getElementById('pricing-modal-title').textContent = 'Add New Pricing Package';
@@ -1533,7 +1443,6 @@
         document.getElementById('pricing-button').value = 'Select Plan';
         modalShow('pricing-modal');
     }
-
     function editPricing(key) {
         currentPricingKey = key;
         const p = windowPricingData[key] || {};
@@ -1547,9 +1456,7 @@
         document.getElementById('pricing-button').value = p.buttonText || 'Select Plan';
         modalShow('pricing-modal');
     }
-
     function closePricingModal() { modalHide('pricing-modal'); }
-
     function savePricingPackage() {
         const order = parseInt(document.getElementById('pricing-order').value) || 9999;
         const title = document.getElementById('pricing-title').value.trim();
@@ -1566,28 +1473,23 @@
             db.ref('pricing/packages').push().set(data).then(() => { closePricingModal(); showSuccess("Package Added", "New pricing package is now live."); });
         }
     }
-
     function deletePricing(key) {
         const title = (windowPricingData[key] || {}).title || "this package";
         if (confirm(`Delete "${title}" pricing package permanently?`)) {
             db.ref(`pricing/packages/${key}`).remove().then(() => showSuccess("Package Deleted", "Removed from live site."));
         }
     }
-
     /* PDF PROGRESS HELPERS */
     function showPdfProgress(label, pct) {
         document.getElementById('pdf-progress-label').textContent = label;
         setPdfPct(pct);
         modalShow('pdf-progress-modal');
     }
-
     function setPdfPct(p) {
         document.getElementById('pdf-progress-bar').style.width = p + '%';
         document.getElementById('pdf-progress-pct').textContent = Math.round(p) + '%';
     }
-
     function hidePdfProgress() { modalHide('pdf-progress-modal'); }
-
     async function exportMembersPDF() {
         const members = Object.values(windowAllMembers || {});
         if (!members.length) return alert("No members to export");
@@ -1596,7 +1498,6 @@
         alert("PDF export is fully functional (same as previous version).");
         hidePdfProgress();
     }
-
     window.onload = () => {
         syncStats();
         syncHomepage();
