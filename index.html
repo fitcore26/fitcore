@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rare Grade Tech | Admin Master</title>
+    <title>FITCORE | Admin Master</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
@@ -59,19 +59,13 @@
 <body class="min-h-screen flex flex-col md:flex-row overflow-hidden">
 <!-- SIDEBAR -->
 <aside class="w-full md:w-64 bg-card border-r border-white/5 p-6 flex flex-col md:sticky md:top-0 md:h-screen overflow-y-auto flex-shrink-0">
-    <!-- LOGO: Rare Grade Tech logo replaces FITCORE text -->
-    <div class="flex items-center gap-3 mb-10">
-        <img src="https://i.postimg.cc/wxFxvbyf/RARE-GRADE-LOGO-blue.png" alt="Rare Grade Tech" class="h-8 object-contain">
-        <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded font-bold tracking-widest">ADMIN</span>
+    <div class="font-heading text-2xl font-bold tracking-wider text-white mb-10">
+        FIT<span class="text-primary">CORE</span> <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded ml-2">ADMIN</span>
     </div>
     <nav class="space-y-2 flex-grow">
         <button onclick="showTab('dashboard')" class="nav-btn active w-full flex items-center gap-3 text-primary bg-primary/10 p-3 rounded-2xl border border-primary/20">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"/></svg>
             Dashboard
-        </button>
-        <button onclick="showTab('siteSettings')" class="nav-btn w-full flex items-center gap-3 text-white hover:text-primary p-3 rounded-2xl border border-transparent hover:border-primary/20">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            Site Settings
         </button>
         <button onclick="showTab('programs')" class="nav-btn w-full flex items-center gap-3 text-white hover:text-primary p-3 rounded-2xl border border-transparent hover:border-primary/20">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2v-2a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2" /></svg>
@@ -93,6 +87,7 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-1a2 2 0 01-2-2H9a2 2 0 01-2-2v-1a2 2 0 012-2m0 0V9a2 2 0 012-2" stroke-width="2" stroke-linecap="round"/></svg>
             Payments
         </button>
+        <!-- NEW: CONTACTS NAV BUTTON -->
         <button onclick="showTab('contacts')" class="nav-btn w-full flex items-center gap-3 text-white hover:text-primary p-3 rounded-2xl border border-transparent hover:border-primary/20">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             Contacts
@@ -105,7 +100,6 @@
 </aside>
 <!-- MAIN -->
 <main class="flex-1 p-6 md:p-12 overflow-y-auto h-screen">
-
     <!-- DASHBOARD TAB -->
     <div id="tab-dashboard" class="tab-content active">
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
@@ -234,144 +228,6 @@
             </div>
         </section>
     </div>
-
-    <!-- ======================= SITE SETTINGS TAB ======================= -->
-    <div id="tab-siteSettings" class="tab-content">
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
-            <div>
-                <h1 class="font-heading text-4xl font-bold">Site <span class="text-primary">Settings</span></h1>
-                <p class="text-gray-400">Edit the navbar and footer that appear on the public-facing website. Changes are live instantly.</p>
-            </div>
-        </header>
-
-        <!-- ── NAVBAR EDITOR ── -->
-        <div class="glass-card p-8 rounded-3xl mb-8">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="font-heading text-2xl">Navigation <span class="text-primary">Bar</span></h3>
-                <span class="px-4 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Header — All Pages</span>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Left: Nav Links -->
-                <div class="space-y-5">
-                    <p class="text-xs uppercase tracking-widest text-gray-400 mb-2">Navigation Links (label &amp; URL)</p>
-                    <div id="nav-links-list" class="space-y-3"></div>
-                    <button onclick="addNavLink()" class="mt-2 w-full bg-white/5 hover:bg-white/10 text-white py-3 rounded-2xl text-sm border border-white/10">+ ADD NAV LINK</button>
-                </div>
-                <!-- Right: CTA Buttons -->
-                <div class="space-y-5">
-                    <p class="text-xs uppercase tracking-widest text-gray-400 mb-2">CTA Buttons</p>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Button 1 — Label</label>
-                        <input id="nav-btn1-label" type="text" placeholder="Client Portal" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Button 1 — URL</label>
-                        <input id="nav-btn1-url" type="text" placeholder="https://dashboard.raregradetech.com/" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Button 2 — Label</label>
-                        <input id="nav-btn2-label" type="text" placeholder="Shop Now" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Button 2 — URL</label>
-                        <input id="nav-btn2-url" type="text" placeholder="shop.html" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <!-- Top Bar -->
-                    <p class="text-xs uppercase tracking-widest text-gray-400 mt-6 mb-2">Top Info Bar</p>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Phone</label>
-                        <input id="topbar-phone" type="text" placeholder="+27 61 527 0749" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Email</label>
-                        <input id="topbar-email" type="text" placeholder="info@raregradetech.com" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Hours Text</label>
-                        <input id="topbar-hours" type="text" placeholder="Mon–Fri: 08:00 – 17:00" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Address (top bar)</label>
-                        <input id="topbar-address" type="text" placeholder="69 Hooge Street, Mokopane" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Promo Pill Text</label>
-                        <input id="topbar-pill" type="text" placeholder="Free Consultation" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                </div>
-            </div>
-            <button onclick="saveNavbarSettings()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full md:w-auto">SAVE NAVBAR SETTINGS</button>
-        </div>
-
-        <!-- ── FOOTER EDITOR ── -->
-        <div class="glass-card p-8 rounded-3xl">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="font-heading text-2xl">Footer <span class="text-primary">Content</span></h3>
-                <span class="px-4 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Bottom — All Pages</span>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Left -->
-                <div class="space-y-5">
-                    <div>
-                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">About / Brand Blurb</label>
-                        <textarea id="footer-about" rows="4" class="bg-dark border border-white/10 focus:border-primary rounded-3xl px-5 py-4 w-full outline-none resize-y text-sm"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Address</label>
-                        <input id="footer-address" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Phone</label>
-                        <input id="footer-phone" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Email</label>
-                        <input id="footer-email" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Office Hours</label>
-                        <input id="footer-hours" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Copyright Text</label>
-                        <input id="footer-copyright" type="text" class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                </div>
-                <!-- Right: Social Links -->
-                <div class="space-y-5">
-                    <p class="text-xs uppercase tracking-widest text-gray-400 mb-2">Social Media Links (leave blank to hide)</p>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Facebook URL</label>
-                        <input id="footer-social-fb" type="text" placeholder="https://facebook.com/..." class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Instagram URL</label>
-                        <input id="footer-social-ig" type="text" placeholder="https://instagram.com/..." class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Twitter / X URL</label>
-                        <input id="footer-social-tw" type="text" placeholder="https://twitter.com/..." class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">LinkedIn URL</label>
-                        <input id="footer-social-li" type="text" placeholder="https://linkedin.com/in/..." class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">YouTube URL</label>
-                        <input id="footer-social-yt" type="text" placeholder="https://youtube.com/..." class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-3 w-full outline-none">
-                    </div>
-                    <div class="pt-4 glass-card rounded-2xl p-4 border border-primary/10">
-                        <p class="text-xs text-gray-400 leading-relaxed">
-                            <span class="text-primary font-bold">ℹ How it works:</span> These settings are saved to <code class="bg-white/5 px-1 rounded">websiteContent/footer</code> and <code class="bg-white/5 px-1 rounded">websiteContent/navbar</code> in Firebase. Your public <code class="bg-white/5 px-1 rounded">index.html</code> already reads from <code class="bg-white/5 px-1 rounded">websiteContent/footer</code> — changes appear instantly on page load.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <button onclick="saveFooterSettings()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full md:w-auto">SAVE FOOTER SETTINGS</button>
-        </div>
-    </div>
-    <!-- ======================= END SITE SETTINGS TAB ======================= -->
-
     <!-- PROGRAMS TAB -->
     <div id="tab-programs" class="tab-content">
         <div class="flex justify-between items-center mb-6">
@@ -487,7 +343,7 @@
             </div>
         </div>
     </div>
-    <!-- CONTACTS TAB -->
+    <!-- ======================= CONTACTS TAB ======================= -->
     <div id="tab-contacts" class="tab-content">
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
             <div>
@@ -496,6 +352,7 @@
             </div>
         </header>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- ADDRESS CARD -->
             <div class="glass-card p-8 rounded-3xl">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="font-heading text-2xl">Location <span class="text-primary">Address</span></h3>
@@ -513,6 +370,7 @@
                 </div>
                 <button onclick="saveContactInfo()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full">SAVE ADDRESS</button>
             </div>
+            <!-- OPENING HOURS CARD -->
             <div class="glass-card p-8 rounded-3xl">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="font-heading text-2xl">Opening <span class="text-primary">Hours</span></h3>
@@ -531,6 +389,7 @@
                 <button onclick="saveContactInfo()" class="mt-8 bg-primary text-black font-bold uppercase tracking-widest px-10 py-4 rounded-2xl hover:scale-105 transition-all w-full">SAVE HOURS</button>
             </div>
         </div>
+        <!-- CONTACT PAGE IMAGE CARD -->
         <div class="glass-card p-8 rounded-3xl">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="font-heading text-2xl">Contact Page <span class="text-primary">Background Image</span></h3>
@@ -538,7 +397,7 @@
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                 <div class="space-y-4">
-                    <p class="text-gray-400 text-sm">This image appears as the background on the right side of the contact page.</p>
+                    <p class="text-gray-400 text-sm">This image appears as the background on the right side of the contact page. Upload a new gym photo to replace it.</p>
                     <div>
                         <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Current Image URL</label>
                         <input id="contact-image-url" type="text" placeholder="https://images.unsplash.com/..." class="bg-dark border border-white/10 focus:border-primary rounded-2xl px-5 py-4 w-full outline-none text-sm">
@@ -556,6 +415,7 @@
                 </div>
             </div>
         </div>
+        <!-- INBOX: CONTACT FORM SUBMISSIONS -->
         <div class="mt-8 glass-card p-8 rounded-3xl">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="font-heading text-2xl">Form <span class="text-primary">Submissions</span></h3>
@@ -582,9 +442,8 @@
             </div>
         </div>
     </div>
+    <!-- ======================= END CONTACTS TAB ======================= -->
 </main>
-
-<!-- ============ ALL EXISTING MODALS (UNCHANGED) ============ -->
 <!-- EDIT MEMBER MODAL -->
 <div id="edit-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50">
     <div class="modal glass-card w-full max-w-2xl mx-4 rounded-3xl p-8 max-h-[90vh] overflow-y-auto">
@@ -825,8 +684,8 @@
         <p id="pdf-progress-pct" class="text-primary font-mono text-sm font-bold">0%</p>
     </div>
 </div>
+<!-- Off-screen PDF render target -->
 <div id="pdf-temp" style="position:fixed;left:-9999px;top:0;width:794px;background:#0A0A0A;z-index:-1;"></div>
-
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyAxBT0oESoL62oz_x_Z8cMtdENWZPx4tMI",
@@ -852,10 +711,8 @@
     let windowTrainersData = {};
     let windowPricingData = {};
     let windowAllMembers = {};
-    // In-memory nav links array for the navbar editor
-    let navLinksData = [];
 
-    /* ── STRIP HTML HELPER ── */
+    /* ======================= STRIP HTML HELPER (FIX FOR HERO HEADING) ======================= */
     function stripHtml(html) {
         const div = document.createElement("div");
         div.innerHTML = html || "";
@@ -863,136 +720,13 @@
     }
 
     const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-    /* ── TAB SWITCHING ── */
     function showTab(tab) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.getElementById(`tab-${tab}`).classList.add('active');
         document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-        const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick')?.includes(`'${tab}'`));
+        const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(`'${tab}'`));
         if (activeBtn) activeBtn.classList.add('active');
     }
-
-    /* ══════════════════════════════════════════════════
-       SITE SETTINGS — NAVBAR
-    ══════════════════════════════════════════════════ */
-    function renderNavLinksList() {
-        const container = document.getElementById('nav-links-list');
-        container.innerHTML = '';
-        navLinksData.forEach((link, i) => {
-            container.innerHTML += `
-                <div class="flex gap-2 items-center" id="nav-link-row-${i}">
-                    <input type="text" value="${link.label || ''}" placeholder="Label" onchange="navLinksData[${i}].label=this.value"
-                        class="flex-1 bg-dark border border-white/10 focus:border-primary rounded-xl px-4 py-2 outline-none text-sm">
-                    <input type="text" value="${link.url || ''}" placeholder="URL (e.g. service.html)" onchange="navLinksData[${i}].url=this.value"
-                        class="flex-1 bg-dark border border-white/10 focus:border-primary rounded-xl px-4 py-2 outline-none text-sm">
-                    <button onclick="removeNavLink(${i})" class="text-red-400 hover:text-red-300 px-2 py-2 text-lg leading-none">×</button>
-                </div>`;
-        });
-    }
-
-    function addNavLink() {
-        navLinksData.push({ label: '', url: '' });
-        renderNavLinksList();
-    }
-
-    function removeNavLink(i) {
-        navLinksData.splice(i, 1);
-        renderNavLinksList();
-    }
-
-    function syncNavbarSettings() {
-        db.ref('websiteContent/navbar').once('value', snap => {
-            const d = snap.val() || {};
-            navLinksData = Array.isArray(d.links) ? d.links : [
-                { label: 'Home', url: 'index.html' },
-                { label: 'Services', url: 'service.html' },
-                { label: 'Gallery', url: 'gallery.html' },
-                { label: 'Contact', url: 'contact.html' }
-            ];
-            renderNavLinksList();
-            document.getElementById('nav-btn1-label').value = d.btn1Label || 'Client Portal';
-            document.getElementById('nav-btn1-url').value   = d.btn1Url   || 'https://dashboard.raregradetech.com/';
-            document.getElementById('nav-btn2-label').value = d.btn2Label || 'Shop Now';
-            document.getElementById('nav-btn2-url').value   = d.btn2Url   || 'shop.html';
-            document.getElementById('topbar-phone').value   = d.topbarPhone   || '+27 61 527 0749';
-            document.getElementById('topbar-email').value   = d.topbarEmail   || 'info@raregradetech.com';
-            document.getElementById('topbar-hours').value   = d.topbarHours   || 'Mon–Fri: 08:00 – 17:00';
-            document.getElementById('topbar-address').value = d.topbarAddress || '69 Hooge Street, Mokopane';
-            document.getElementById('topbar-pill').value    = d.topbarPill    || 'Free Consultation';
-        });
-    }
-
-    function saveNavbarSettings() {
-        // Collect current values from input rows before saving
-        const rows = document.querySelectorAll('#nav-links-list > div');
-        navLinksData = [];
-        rows.forEach(row => {
-            const inputs = row.querySelectorAll('input');
-            navLinksData.push({ label: inputs[0].value.trim(), url: inputs[1].value.trim() });
-        });
-
-        const data = {
-            links:          navLinksData.filter(l => l.label),
-            btn1Label:      document.getElementById('nav-btn1-label').value.trim(),
-            btn1Url:        document.getElementById('nav-btn1-url').value.trim(),
-            btn2Label:      document.getElementById('nav-btn2-label').value.trim(),
-            btn2Url:        document.getElementById('nav-btn2-url').value.trim(),
-            topbarPhone:    document.getElementById('topbar-phone').value.trim(),
-            topbarEmail:    document.getElementById('topbar-email').value.trim(),
-            topbarHours:    document.getElementById('topbar-hours').value.trim(),
-            topbarAddress:  document.getElementById('topbar-address').value.trim(),
-            topbarPill:     document.getElementById('topbar-pill').value.trim()
-        };
-        db.ref('websiteContent/navbar').set(data)
-            .then(() => showSuccess('Navbar Saved', 'Navbar settings are now live on the public site.'))
-            .catch(e => alert('Save failed: ' + e.message));
-    }
-
-    /* ══════════════════════════════════════════════════
-       SITE SETTINGS — FOOTER
-    ══════════════════════════════════════════════════ */
-    function syncFooterSettings() {
-        // The public index.html reads from websiteContent/footer — we write there
-        db.ref('websiteContent/footer').once('value', snap => {
-            const d = snap.val() || {};
-            document.getElementById('footer-about').value       = d.about     || 'Rare Grade Tech — delivering digital solutions that drive growth, improve operations, and create lasting impact. Proudly based in Mokopane, Limpopo.';
-            document.getElementById('footer-address').value     = d.address   || '69 Hooge Street, Mokopane, Limpopo';
-            document.getElementById('footer-phone').value       = d.phone     || '+27 61 527 0749';
-            document.getElementById('footer-email').value       = d.email     || 'info@raregradetech.com';
-            document.getElementById('footer-hours').value       = d.hours     || 'Mon – Fri: 08:00 – 17:00';
-            document.getElementById('footer-copyright').value   = d.copyright || '© 2025 Rare Grade Tech. All rights reserved.';
-            document.getElementById('footer-social-fb').value   = d.socialFb  || '';
-            document.getElementById('footer-social-ig').value   = d.socialIg  || '';
-            document.getElementById('footer-social-tw').value   = d.socialTw  || '';
-            document.getElementById('footer-social-li').value   = d.socialLi  || '';
-            document.getElementById('footer-social-yt').value   = d.socialYt  || '';
-        });
-    }
-
-    function saveFooterSettings() {
-        const data = {
-            about:      document.getElementById('footer-about').value.trim(),
-            address:    document.getElementById('footer-address').value.trim(),
-            phone:      document.getElementById('footer-phone').value.trim(),
-            email:      document.getElementById('footer-email').value.trim(),
-            hours:      document.getElementById('footer-hours').value.trim(),
-            copyright:  document.getElementById('footer-copyright').value.trim(),
-            socialFb:   document.getElementById('footer-social-fb').value.trim(),
-            socialIg:   document.getElementById('footer-social-ig').value.trim(),
-            socialTw:   document.getElementById('footer-social-tw').value.trim(),
-            socialLi:   document.getElementById('footer-social-li').value.trim(),
-            socialYt:   document.getElementById('footer-social-yt').value.trim()
-        };
-        // Write to websiteContent/footer — this is the exact path index.html already reads
-        db.ref('websiteContent/footer').set(data)
-            .then(() => showSuccess('Footer Saved', 'Footer content is now live on the public site.'))
-            .catch(e => alert('Save failed: ' + e.message));
-    }
-
-    /* ══════════════════════════════════════════════════
-       EXISTING FUNCTIONS (UNCHANGED)
-    ══════════════════════════════════════════════════ */
     function syncStats() {
         db.ref('stats').on('value', snap => {
             const d = snap.val() || {};
@@ -1008,6 +742,7 @@
     function syncHomepage() {
         db.ref('homepage/hero').on('value', snap => {
             const d = snap.val() || {};
+            // FIXED: Use stripHtml so admin input shows clean text only (no visible <span> code)
             document.getElementById('hero-heading').value = stripHtml(d.heading || "");
             document.getElementById('hero-subtext').value = d.subtext || "";
             document.getElementById('hero-button').value = d.buttonText || "";
@@ -1105,7 +840,7 @@
             showSuccess("CTA Image Uploaded", "URL saved. Click SAVE CTA SECTION to apply.");
         } catch (e) { alert("Upload failed: " + e.message); }
     }
-    /* CONTACTS PAGE SETTINGS */
+    /* ======================= CONTACTS PAGE SETTINGS ======================= */
     function syncContactSettings() {
         db.ref('contactPage').on('value', snap => {
             const d = snap.val() || {};
@@ -1160,7 +895,7 @@
                 return;
             }
             const entries = snap.val();
-            const keys = Object.keys(entries).reverse();
+            const keys = Object.keys(entries).reverse(); // newest first
             countEl.textContent = `${keys.length} submission${keys.length !== 1 ? 's' : ''}`;
             keys.forEach(key => {
                 const c = entries[key];
@@ -1185,6 +920,7 @@
             db.ref(`contacts/${key}`).remove().catch(e => alert("Failed: " + e.message));
         }
     }
+    /* ======================= END CONTACTS PAGE SETTINGS ======================= */
     function getPlanDuration(plan) {
         if (!plan) return 30;
         const p = plan.toLowerCase();
@@ -1304,13 +1040,19 @@
             modalShow('delete-confirm-modal');
         });
     }
-    function closeDeleteModal() { modalHide('delete-confirm-modal'); pendingDeleteKey = null; }
+    function closeDeleteModal() {
+        modalHide('delete-confirm-modal');
+        pendingDeleteKey = null;
+    }
     function confirmDeleteMember() {
         if (!pendingDeleteKey) return;
         db.ref(`members/${pendingDeleteKey}`).remove().then(() => {
             closeDeleteModal();
             showSuccess("Member Deleted", "All data removed permanently.");
-        }).catch(e => { closeDeleteModal(); alert("Failed to delete: " + e.message); });
+        }).catch(e => {
+            closeDeleteModal();
+            alert("Failed to delete: " + e.message);
+        });
     }
     function listenToApprovedMembers() {
         db.ref('members').on('value', snap => {
@@ -1365,7 +1107,8 @@
             document.getElementById('modal-name').value = m.name||"";
             document.getElementById('modal-email').value = m.email||"";
             document.getElementById('modal-phone').value = m.phone||"";
-            document.getElementById('modal-plan').value = m.plan || "";
+            const planSelect = document.getElementById('modal-plan');
+            planSelect.value = m.plan || "";
             document.getElementById('modal-photo-url').value = m.profileImage||"";
             document.getElementById('modal-preview').src = m.profileImage||"https://via.placeholder.com/80";
             document.getElementById('modal-notes').value = m.notes||"";
@@ -1755,8 +1498,6 @@
         alert("PDF export is fully functional (same as previous version).");
         hidePdfProgress();
     }
-
-    /* ── INIT ── */
     window.onload = () => {
         syncStats();
         syncHomepage();
@@ -1768,8 +1509,6 @@
         loadAdminPricing();
         syncContactSettings();
         listenToContactsInbox();
-        syncNavbarSettings();
-        syncFooterSettings();
         showTab('dashboard');
         windowAllMembers = {};
         windowProgramsData = {};
